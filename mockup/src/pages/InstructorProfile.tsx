@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon, StarIcon, CarIcon, MapPinIcon, CheckCircleIcon } from 'lucide-react';
 import { MapContainer, TileLayer, Circle } from 'react-leaflet';
-import { mockInstructors } from '../data/mockInstructors';
+import { mockInstructors } from '../data/mockInstructors.ts';
 import 'leaflet/dist/leaflet.css';
 export const InstructorProfile: React.FC = () => {
   const {

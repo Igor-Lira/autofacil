@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon, FilterIcon } from 'lucide-react';
-import { mockInstructors } from '../data/mockInstructors';
-import { InstructorCard } from '../components/InstructorCard';
-import { FilterModal, FilterState } from '../components/FilterModal';
+import { mockInstructors } from '../data/mockInstructors.ts';
+import { InstructorCard } from '../components/InstructorCard.tsx';
+import { FilterModal, FilterState } from '../components/FilterModal.tsx';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 const carIcon = new L.Icon({

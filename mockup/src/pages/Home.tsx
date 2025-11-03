@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { MapPinIcon, FilterIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { mockInstructors } from '../data/mockInstructors';
-import { FilterModal, FilterState } from '../components/FilterModal';
+import { mockInstructors } from '../data/mockInstructors.ts';
+import { FilterModal, FilterState } from '../components/FilterModal.tsx';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 // Fix for default marker icons in react-leaflet

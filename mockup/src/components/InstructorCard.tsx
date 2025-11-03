@@ -1,6 +1,6 @@
 import React from 'react';
 import { StarIcon, CarIcon, CalendarIcon } from 'lucide-react';
-import { Instructor } from '../data/mockInstructors';
+import { Instructor } from '../data/mockInstructors.ts';
 interface InstructorCardProps {
   instructor: Instructor;
   onClick: () => void;
