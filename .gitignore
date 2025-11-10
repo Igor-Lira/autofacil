@@ -1,0 +1,5 @@
+node_modules
+.idea
+design-system/dist
+design-system/.turbo
+design-system/propia-main/node_modules
