@@ -1,0 +1,27 @@
+[
+  {
+    "userId": "user001",
+    "categoriaDesejada": "B",
+    "orcamento": 2000,
+    "horariosPreferidos": ["manhã", "tarde"],
+    "progressoHoras": {
+      "teoricas": 12,
+      "praticas": 5,
+      "porFoco": {
+        "manobras": 2,
+        "rodovia": 1,
+        "estacionamento": 2
+      }
+    },
+    "historicoAulas": [
+      "aula001",
+      "aula002",
+      "aula003"
+    ],
+    "preferencias": {
+      "tipoVeiculo": "manual",
+      "aceitaIniciantes": true,
+      "acessivelPcD": false
+    }
+  }
+]

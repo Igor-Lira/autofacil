@@ -1,0 +1,24 @@
+[
+  {
+    "mensagemId": "msg001",
+    "conversaId": "user001_user002",
+    "remetenteId": "user001",
+    "destinatarioId": "user002",
+    "tipo": "texto",
+    "conteudo": "Boa tarde! Confirma aula amanhã às 10h?",
+    "status": "lido",
+    "createdAt": "2025-05-17T15:30:00Z",
+    "readAt": "2025-05-17T15:32:00Z"
+  },
+  {
+    "mensagemId": "msg002",
+    "conversaId": "user001_user002",
+    "remetenteId": "user002",
+    "destinatarioId": "user001",
+    "tipo": "texto",
+    "conteudo": "Confirmado! Te encontro na Rua das Flores às 10h. Não esqueça os documentos!",
+    "status": "lido",
+    "createdAt": "2025-05-17T15:35:00Z",
+    "readAt": "2025-05-17T15:40:00Z"
+  }
+]

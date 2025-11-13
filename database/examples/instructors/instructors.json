@@ -1,0 +1,80 @@
+[
+  {
+    "userId": "user002",
+    "status": "aprovado",
+    "cnh": {
+      "numero": "123456789012345",
+      "categoria": ["A", "B", "C"],
+      "validade": "2028-12-31T23:59:59Z",
+      "temEAR": true,
+      "urlImagem": "https://storage.googleapis.com/dirijafacil/cnh/user002_cnh.jpg"
+    },
+    "certificadoDetran": {
+      "url": "https://storage.googleapis.com/dirijafacil/certificados/user002_cert.pdf",
+      "dataEmissao": "2023-01-15T00:00:00Z",
+      "validado": true
+    },
+    "antecedentes": {
+      "url": "https://storage.googleapis.com/dirijafacil/antecedentes/user002_antec.pdf",
+      "dataEmissao": "2025-04-01T00:00:00Z"
+    },
+    "veiculos": [
+      {
+        "modelo": "Volkswagen Gol 1.0",
+        "placa": "ABC1D23",
+        "ano": 2020,
+        "tipo": "manual",
+        "identificacaoVisual": true,
+        "fotos": [
+          "https://storage.googleapis.com/dirijafacil/veiculos/abc1d23_1.jpg",
+          "https://storage.googleapis.com/dirijafacil/veiculos/abc1d23_2.jpg"
+        ]
+      }
+    ],
+    "anosExperiencia": 5,
+    "precoHora": 75,
+    "categorias": ["A", "B", "C"],
+    "disponibilidade": {
+      "2025-05-20": [
+        {
+          "inicio": "08:00",
+          "fim": "12:00",
+          "disponivel": true
+        },
+        {
+          "inicio": "14:00",
+          "fim": "18:00",
+          "disponivel": true
+        }
+      ],
+      "2025-05-21": [
+        {
+          "inicio": "09:00",
+          "fim": "17:00",
+          "disponivel": true
+        }
+      ]
+    },
+    "rating": 4.8,
+    "totalAvaliacoes": 127,
+    "totalAlunos": 89,
+    "taxaAprovacao": 92,
+    "badges": ["100alunos", "aprovacao90"],
+    "bio": "Instrutor experiente com foco em alunos iniciantes. Especializado em manobras e estacionamento. Paciência e segurança em primeiro lugar!",
+    "areasAtendidas": [
+      {
+        "raio": 20,
+        "centro": {
+          "_latitude": -23.5614,
+          "_longitude": -46.6558
+        }
+      }
+    ],
+    "carteira": {
+      "saldoDisponivel": 1240.00,
+      "saldoBloqueado": 150.00
+    },
+    "createdAt": "2025-04-15T14:30:00Z",
+    "updatedAt": "2025-05-15T11:20:00Z"
+  }
+]

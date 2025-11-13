@@ -1,0 +1,24 @@
+[
+  {
+    "avaliacaoId": "aval001",
+    "aulaId": "aula002",
+    "avaliadorId": "user001",
+    "avaliadoId": "user002",
+    "tipo": "aluno_avalia_instrutor",
+    "rating": 5,
+    "tags": ["pontual", "paciente", "explicativo", "veiculo_limpo"],
+    "comentario": "Excelente instrutora! Muito paciente e didática. Recomendo!",
+    "createdAt": "2025-05-05T17:00:00Z"
+  },
+  {
+    "avaliacaoId": "aval002",
+    "aulaId": "aula002",
+    "avaliadorId": "user002",
+    "avaliadoId": "user001",
+    "tipo": "instrutor_avalia_aluno",
+    "rating": 4,
+    "tags": ["atencioso", "pontual"],
+    "comentario": "Aluno dedicado e pontual. Precisa praticar mais manobras.",
+    "createdAt": "2025-05-05T17:05:00Z"
+  }
+]

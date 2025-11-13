@@ -1,0 +1,75 @@
+[
+  {
+    "aulaId": "aula001",
+    "alunoId": "user001",
+    "instrutorId": "user002",
+    "dataHora": "2025-05-18T10:00:00Z",
+    "duracao": 2,
+    "localEncontro": {
+      "endereco": "Rua das Flores, 123 - Centro, São Paulo - SP",
+      "coordenadas": {
+        "_latitude": -23.5505,
+        "_longitude": -46.6333
+      }
+    },
+    "categoria": "B",
+    "foco": ["manobras", "estacionamento"],
+    "status": "confirmada",
+    "valorTotal": 150,
+    "deposito": 30,
+    "pagamentoId": "pag001",
+    "detranProtocolo": null,
+    "detranHash": null,
+    "notaProgresso": null,
+    "tracking": {
+      "pontosGPS": [],
+      "consentimento": true
+    },
+    "cancelamento": null,
+    "createdAt": "2025-05-10T14:00:00Z",
+    "updatedAt": "2025-05-10T15:30:00Z",
+    "confirmedAt": "2025-05-10T15:30:00Z",
+    "completedAt": null
+  },
+  {
+    "aulaId": "aula002",
+    "alunoId": "user001",
+    "instrutorId": "user002",
+    "dataHora": "2025-05-05T14:00:00Z",
+    "duracao": 2,
+    "localEncontro": {
+      "endereco": "Av. Paulista, 1000 - Bela Vista, São Paulo - SP",
+      "coordenadas": {
+        "_latitude": -23.5614,
+        "_longitude": -46.6558
+      }
+    },
+    "categoria": "B",
+    "foco": ["rodovia"],
+    "status": "concluida",
+    "valorTotal": 150,
+    "deposito": 30,
+    "pagamentoId": "pag002",
+    "detranProtocolo": "DETRAN-SP-2025-001234",
+    "detranHash": "8f4b2c9a1e5d7f3b6a8c4e2d9f1b5a7c",
+    "notaProgresso": 4,
+    "tracking": {
+      "pontosGPS": [
+        {
+          "_latitude": -23.5614,
+          "_longitude": -46.6558
+        },
+        {
+          "_latitude": -23.5620,
+          "_longitude": -46.6570
+        }
+      ],
+      "consentimento": true
+    },
+    "cancelamento": null,
+    "createdAt": "2025-05-01T10:00:00Z",
+    "updatedAt": "2025-05-05T16:30:00Z",
+    "confirmedAt": "2025-05-01T11:00:00Z",
+    "completedAt": "2025-05-05T16:00:00Z"
+  }
+]

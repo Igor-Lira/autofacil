@@ -1,0 +1,13 @@
+[
+  {
+    "configId": "global",
+    "comissaoPadrao": 0.15,
+    "comissaoPacote": 0.10,
+    "saqueMinimo": 100,
+    "taxaSaquePix": 2,
+    "validadeQrCodeMinutos": 10,
+    "tempoMaximoCancelamentoGratis": 24,
+    "multaCancelamentoTarde": 0.50,
+    "updatedAt": "2025-05-01T00:00:00Z"
+  }
+]

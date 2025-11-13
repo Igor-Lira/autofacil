@@ -1,0 +1,16 @@
+[
+  {
+    "reportId": "rep001",
+    "reportadoPorId": "user001",
+    "reportadoId": "user003",
+    "tipo": "spam",
+    "descricao": "Enviando mensagens promocionais não solicitadas",
+    "evidencias": [
+      "https://storage.googleapis.com/dirijafacil/reports/rep001_ev1.jpg"
+    ],
+    "status": "em_analise",
+    "acaoTomada": null,
+    "createdAt": "2025-05-12T10:00:00Z",
+    "resolvedAt": null
+  }
+]

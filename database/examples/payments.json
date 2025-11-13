@@ -1,0 +1,38 @@
+[
+  {
+    "pagamentoId": "pag001",
+    "aulaId": "aula001",
+    "alunoId": "user001",
+    "instrutorId": "user002",
+    "valor": 150,
+    "comissao": 22.5,
+    "valorInstrutor": 127.5,
+    "metodo": "pix",
+    "status": "concluido",
+    "transacaoId": "MP-20250510-ABC123",
+    "qrCodePix": "00020126580014br.gov.bcb.pix...",
+    "notaFiscal": null,
+    "reembolso": null,
+    "createdAt": "2025-05-10T14:00:00Z",
+    "updatedAt": "2025-05-10T14:05:00Z",
+    "processedAt": "2025-05-10T14:05:00Z"
+  },
+  {
+    "pagamentoId": "pag002",
+    "aulaId": "aula002",
+    "alunoId": "user001",
+    "instrutorId": "user002",
+    "valor": 150,
+    "comissao": 22.5,
+    "valorInstrutor": 127.5,
+    "metodo": "cartao_credito",
+    "status": "concluido",
+    "transacaoId": "MP-20250505-XYZ789",
+    "qrCodePix": null,
+    "notaFiscal": "https://storage.googleapis.com/dirijafacil/nf/pag002.pdf",
+    "reembolso": null,
+    "createdAt": "2025-05-05T16:00:00Z",
+    "updatedAt": "2025-05-05T16:10:00Z",
+    "processedAt": "2025-05-05T16:10:00Z"
+  }
+]

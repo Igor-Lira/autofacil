@@ -1,0 +1,62 @@
+[
+  {
+    "userId": "user001",
+    "type": "aluno",
+    "cpf": "12345678900",
+    "nome": "João Silva Santos",
+    "email": "joao.silva@email.com",
+    "telefone": "+5511987654321",
+    "dataNascimento": "2000-03-15T00:00:00Z",
+    "foto": "https://storage.googleapis.com/dirijafacil/users/user001.jpg",
+    "endereco": {
+      "rua": "Rua das Flores",
+      "numero": "123",
+      "bairro": "Centro",
+      "cidade": "São Paulo",
+      "estado": "SP",
+      "cep": "01234-567",
+      "coordenadas": {
+        "_latitude": -23.5505,
+        "_longitude": -46.6333
+      }
+    },
+    "documentos": {
+      "rg": "https://storage.googleapis.com/dirijafacil/docs/user001_rg.jpg",
+      "comprovanteResidencia": "https://storage.googleapis.com/dirijafacil/docs/user001_comprovante.pdf"
+    },
+    "status": "ativo",
+    "consentimentoLGPD": true,
+    "createdAt": "2025-05-01T10:00:00Z",
+    "updatedAt": "2025-05-01T10:00:00Z"
+  },
+  {
+    "userId": "user002",
+    "type": "instrutor",
+    "cpf": "09876543211",
+    "nome": "Maria Oliveira Costa",
+    "email": "maria.oliveira@email.com",
+    "telefone": "+5511912345678",
+    "dataNascimento": "1990-07-22T00:00:00Z",
+    "foto": "https://storage.googleapis.com/dirijafacil/users/user002.jpg",
+    "endereco": {
+      "rua": "Avenida Paulista",
+      "numero": "1000",
+      "bairro": "Bela Vista",
+      "cidade": "São Paulo",
+      "estado": "SP",
+      "cep": "01310-100",
+      "coordenadas": {
+        "_latitude": -23.5614,
+        "_longitude": -46.6558
+      }
+    },
+    "documentos": {
+      "rg": "https://storage.googleapis.com/dirijafacil/docs/user002_rg.jpg",
+      "comprovanteResidencia": "https://storage.googleapis.com/dirijafacil/docs/user002_comprovante.pdf"
+    },
+    "status": "ativo",
+    "consentimentoLGPD": true,
+    "createdAt": "2025-04-15T14:30:00Z",
+    "updatedAt": "2025-05-10T09:15:00Z"
+  }
+]

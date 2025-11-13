@@ -1,0 +1,26 @@
+[
+  {
+    "transacaoId": "trans001",
+    "instrutorId": "user002",
+    "tipo": "credito",
+    "valor": 127.5,
+    "descricao": "Pagamento aula #aula002",
+    "saldoAnterior": 1112.5,
+    "saldoNovo": 1240,
+    "metodoPagamento": null,
+    "status": "concluido",
+    "createdAt": "2025-05-05T16:10:00Z"
+  },
+  {
+    "transacaoId": "trans002",
+    "instrutorId": "user002",
+    "tipo": "saque",
+    "valor": 500,
+    "descricao": "Saque PIX",
+    "saldoAnterior": 1240,
+    "saldoNovo": 740,
+    "metodoPagamento": "pix",
+    "status": "concluido",
+    "createdAt": "2025-05-10T09:00:00Z"
+  }
+]
