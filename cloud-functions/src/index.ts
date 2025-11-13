@@ -41,3 +41,19 @@ export {
   markLessonCompleted,
   processPaymentReleases
 } from './scheduling/markLessonCompleted';
+
+// Payment Functions
+export { processPayment } from './payments/processPayment';
+export {
+  handlePaymentWebhook,
+  retryFailedWebhooks
+} from './payments/handlePaymentWebhook';
+export {
+  requestWithdrawal,
+  processTEDBatch,
+  getWallet
+} from './payments/walletManagement';
+export {
+  processRefund,
+  generateMonthlyReports
+} from './payments/refundsAndReports';
