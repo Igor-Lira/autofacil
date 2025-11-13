@@ -1,0 +1,31 @@
+{
+  "name": "autofacil-cloud-functions",
+  "version": "1.0.0",
+  "description": "Cloud Functions for AutoFacil Platform",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^4.5.0",
+    "bcrypt": "^5.1.1",
+    "axios": "^1.6.0",
+    "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/bcrypt": "^5.0.2",
+    "typescript": "^5.3.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+
