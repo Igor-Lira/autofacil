@@ -22,3 +22,9 @@ export {
 export { sendEmailVerification } from './auth/emailVerification';
 export { resetPassword } from './auth/resetPassword';
 
+// Search & Matching Functions
+export { searchInstructors } from './search/searchInstructors';
+export {
+  getInstructorAvailability,
+  syncInstructorCalendar
+} from './search/getInstructorAvailability';
