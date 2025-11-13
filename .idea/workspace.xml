@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f127d4b5-bdce-44a7-ac61-70c5b8405103" name="Changes" comment="remove file" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="design-system" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="34yagq50FJkuGLyjwvTFfW31SHk" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/ilirapassos/igor-ai/autofacil",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "/Users/ilirapassos/.nvm/versions/node/v20.18.0/bin/node",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "/Users/ilirapassos/igor-ai/autofacil/design-system/node_modules/prettier",
+    "settings.editor.selected.configurable": "settings.nodejs",
+    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/database/examples/payments" />
+      <recent name="$PROJECT_DIR$/database/examples" />
+      <recent name="$PROJECT_DIR$/design-system" />
+      <recent name="$PROJECT_DIR$/app" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/front-end" />
+      <recent name="$PROJECT_DIR$/database/examples/instructors" />
+      <recent name="$PROJECT_DIR$/database/examples/students" />
+      <recent name="$PROJECT_DIR$/database/examples/users" />
+      <recent name="$PROJECT_DIR$/database/examples/lessons" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-WS-243.26053.12" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f127d4b5-bdce-44a7-ac61-70c5b8405103" name="Changes" comment="" />
+      <created>1762188379936</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1762188379936</updated>
+      <workItem from="1762188380815" duration="2074000" />
+      <workItem from="1762190465782" duration="284000" />
+      <workItem from="1762190757475" duration="106000" />
+      <workItem from="1762191018932" duration="46000" />
+      <workItem from="1762191153963" duration="746000" />
+      <workItem from="1762792539973" duration="6897000" />
+      <workItem from="1762799900665" duration="220000" />
+      <workItem from="1762800130156" duration="1099000" />
+      <workItem from="1762801238374" duration="31000" />
+      <workItem from="1762801274525" duration="152000" />
+      <workItem from="1762934747375" duration="334000" />
+      <workItem from="1762935355968" duration="807000" />
+      <workItem from="1763032459790" duration="1567000" />
+      <workItem from="1763063755457" duration="406000" />
+      <workItem from="1763064175082" duration="190000" />
+      <workItem from="1763064383562" duration="4837000" />
+      <workItem from="1763069532227" duration="4811000" />
+    </task>
+    <task id="LOCAL-00001" summary="reorganize files">
+      <option name="closed" value="true" />
+      <created>1762188424493</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1762188424493</updated>
+    </task>
+    <task id="LOCAL-00002" summary="add guidelines">
+      <option name="closed" value="true" />
+      <created>1762188795448</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1762188795448</updated>
+    </task>
+    <task id="LOCAL-00003" summary="add design system guideline">
+      <option name="closed" value="true" />
+      <created>1762189806517</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1762189806517</updated>
+    </task>
+    <task id="LOCAL-00004" summary="add booking design system into the project">
+      <option name="closed" value="true" />
+      <created>1762792946683</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1762792946683</updated>
+    </task>
+    <task id="LOCAL-00005" summary="wip : try design system">
+      <option name="closed" value="true" />
+      <created>1762799791914</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1762799791914</updated>
+    </task>
+    <task id="LOCAL-00006" summary="copy design system">
+      <option name="closed" value="true" />
+      <created>1762801227892</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1762801227892</updated>
+    </task>
+    <task id="LOCAL-00007" summary="add models and API documentation">
+      <option name="closed" value="true" />
+      <created>1763066047266</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1763066047266</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add cloud functions">
+      <option name="closed" value="true" />
+      <created>1763066229004</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1763066229004</updated>
+    </task>
+    <task id="LOCAL-00009" summary="add design-system">
+      <option name="closed" value="true" />
+      <created>1763066491422</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1763066491422</updated>
+    </task>
+    <task id="LOCAL-00010" summary="add diagrams">
+      <option name="closed" value="true" />
+      <created>1763067233555</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1763067233555</updated>
+    </task>
+    <task id="LOCAL-00011" summary="add authentication and user management functions">
+      <option name="closed" value="true" />
+      <created>1763068306655</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1763068306655</updated>
+    </task>
+    <task id="LOCAL-00012" summary="add cloud functions for instructor search and availability">
+      <option name="closed" value="true" />
+      <created>1763068544454</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1763068544454</updated>
+    </task>
+    <task id="LOCAL-00013" summary="add cloud functions for booking management (create, confirm, cancel, reschedule, mark completed)">
+      <option name="closed" value="true" />
+      <created>1763068798953</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1763068798953</updated>
+    </task>
+    <task id="LOCAL-00014" summary="add cloud functions for payment processing (handlePaymentWebhook, processRefund, requestWithdrawal, retryFailedWebhooks)">
+      <option name="closed" value="true" />
+      <created>1763069187412</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1763069187412</updated>
+    </task>
+    <task id="LOCAL-00015" summary="add data import scripts for students, instructors, lessons, payments, and users">
+      <option name="closed" value="true" />
+      <created>1763072906000</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1763072906000</updated>
+    </task>
+    <task id="LOCAL-00016" summary="add project as frontend (copy of design system)">
+      <option name="closed" value="true" />
+      <created>1763073427979</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1763073427979</updated>
+    </task>
+    <task id="LOCAL-00017" summary="add admin service for managing instructor approvals and user reports">
+      <option name="closed" value="true" />
+      <created>1763073775582</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1763073775582</updated>
+    </task>
+    <task id="LOCAL-00018" summary="remove file">
+      <option name="closed" value="true" />
+      <created>1763073865550</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1763073865550</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="762b8fa3-53bf-41c4-ab14-c3d8e6c840ca" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="762b8fa3-53bf-41c4-ab14-c3d8e6c840ca">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="reorganize files" />
+    <MESSAGE value="add guidelines" />
+    <MESSAGE value="add design system guideline" />
+    <MESSAGE value="add booking design system into the project" />
+    <MESSAGE value="wip : try design system" />
+    <MESSAGE value="copy design system" />
+    <MESSAGE value="add models and API documentation" />
+    <MESSAGE value="add cloud functions" />
+    <MESSAGE value="add design-system" />
+    <MESSAGE value="add diagrams" />
+    <MESSAGE value="add authentication and user management functions" />
+    <MESSAGE value="add cloud functions for instructor search and availability" />
+    <MESSAGE value="add cloud functions for booking management (create, confirm, cancel, reschedule, mark completed)" />
+    <MESSAGE value="add cloud functions for payment processing (handlePaymentWebhook, processRefund, requestWithdrawal, retryFailedWebhooks)" />
+    <MESSAGE value="add data import scripts for students, instructors, lessons, payments, and users" />
+    <MESSAGE value="add project as frontend (copy of design system)" />
+    <MESSAGE value="add admin service for managing instructor approvals and user reports" />
+    <MESSAGE value="remove file" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove file" />
+  </component>
+</project>

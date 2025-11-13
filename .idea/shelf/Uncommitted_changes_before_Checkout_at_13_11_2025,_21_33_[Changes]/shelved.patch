@@ -1,0 +1,63 @@
+Index: design-system/propia-main/package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n  \"name\": \"propia\",\n  \"version\": \"1.0.0\",\n  \"scripts\": {\n    \"android\": \"expo start --android\",\n    \"ios\": \"expo start --ios\",\n    \"start\": \"expo start\",\n    \"prebuild\": \"expo prebuild\",\n    \"lint\": \"eslint \\\"**/*.{js,jsx,ts,tsx}\\\" && prettier -c \\\"**/*.{js,jsx,ts,tsx,json}\\\"\",\n    \"format\": \"eslint \\\"**/*.{js,jsx,ts,tsx}\\\" --fix && prettier \\\"**/*.{js,jsx,ts,tsx,json}\\\" --write\"\n  },\n  \"dependencies\": {\n    \"@expo-google-fonts/outfit\": \"^0.3.0\",\n    \"@expo/vector-icons\": \"^15.0.2\",\n    \"@react-native-community/datetimepicker\": \"8.4.4\",\n    \"@react-native-community/slider\": \"^5.0.1\",\n    \"@react-native-community/viewpager\": \"^5.0.11\",\n    \"@react-navigation/bottom-tabs\": \"^7.2.0\",\n    \"@react-navigation/drawer\": \"^7.1.1\",\n    \"@react-navigation/native\": \"^7.0.14\",\n    \"babel-preset-expo\": \"~54.0.0\",\n    \"clsx\": \"^2.1.1\",\n    \"expo\": \"^54.0.8\",\n    \"expo-asset\": \"~12.0.8\",\n    \"expo-blur\": \"~15.0.7\",\n    \"expo-constants\": \"~18.0.9\",\n    \"expo-font\": \"~14.0.8\",\n    \"expo-image-picker\": \"~17.0.8\",\n    \"expo-linear-gradient\": \"~15.0.7\",\n    \"expo-linking\": \"~8.0.8\",\n    \"expo-location\": \"~19.0.7\",\n    \"expo-navigation-bar\": \"~5.0.8\",\n    \"expo-notifications\": \"~0.32.11\",\n    \"expo-router\": \"~6.0.6\",\n    \"expo-sharing\": \"~14.0.7\",\n    \"expo-status-bar\": \"~3.0.8\",\n    \"expo-system-ui\": \"~6.0.7\",\n    \"expo-updates\": \"~29.0.10\",\n    \"lottie-react-native\": \"~7.3.1\",\n    \"lucide-react-native\": \"^0.511.0\",\n    \"react\": \"19.1.0\",\n    \"react-dom\": \"19.1.0\",\n    \"react-native\": \"0.81.4\",\n    \"react-native-actions-sheet\": \"^0.9.7\",\n    \"react-native-calendars\": \"^1.1312.1\",\n    \"react-native-chart-kit\": \"^6.12.0\",\n    \"react-native-css-interop\": \"^0.1.22\",\n    \"react-native-gesture-handler\": \"~2.28.0\",\n    \"react-native-maps\": \"1.20.1\",\n    \"react-native-modal\": \"^14.0.0-rc.0\",\n    \"react-native-modal-datetime-picker\": \"^18.0.0\",\n    \"react-native-navigation-bar-color\": \"^2.0.2\",\n    \"react-native-reanimated\": \"~4.1.0\",\n    \"react-native-safe-area-context\": \"~5.6.0\",\n    \"react-native-screens\": \"~4.16.0\",\n    \"react-native-svg\": \"15.12.1\",\n    \"react-native-web\": \"^0.21.0\",\n    \"react-native-worklets\": \"^0.5.1\",\n    \"tailwind-merge\": \"^3.0.2\",\n    \"victory-native\": \"^37.3.6\"\n  },\n  \"devDependencies\": {\n    \"@babel/core\": \"^7.20.0\",\n    \"@babel/plugin-proposal-throw-expressions\": \"^7.25.9\",\n    \"@types/react\": \"~19.1.10\",\n    \"@typescript-eslint/eslint-plugin\": \"^7.7.0\",\n    \"@typescript-eslint/parser\": \"^7.7.0\",\n    \"eslint\": \"^8.57.0\",\n    \"eslint-config-universe\": \"^12.0.1\",\n    \"nativewind\": \"^2.0.11\",\n    \"patch-package\": \"^8.0.0\",\n    \"prettier\": \"^3.2.5\",\n    \"prettier-plugin-tailwindcss\": \"^0.5.11\",\n    \"tailwindcss\": \"^3.3.2\",\n    \"typescript\": \"~5.9.2\"\n  },\n  \"eslintConfig\": {\n    \"extends\": \"universe/native\",\n    \"root\": true\n  },\n  \"main\": \"expo-router/entry\",\n  \"private\": true\n}\n
+===================================================================
+diff --git a/design-system/propia-main/package.json b/design-system/propia-main/package.json
+--- a/design-system/propia-main/package.json	(revision 16f2d3844bb64bdb26d59dae8c6b6a768fb614b8)
++++ b/design-system/propia-main/package.json	(date 1763032699502)
+@@ -2,8 +2,8 @@
+   "name": "propia",
+   "version": "1.0.0",
+   "scripts": {
+-    "android": "expo start --android",
+-    "ios": "expo start --ios",
++    "android": "expo run:android",
++    "ios": "expo run:ios",
+     "start": "expo start",
+     "prebuild": "expo prebuild",
+     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
+Index: design-system/propia-main/app.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n  \"expo\": {\n    \"newArchEnabled\": true,\n    \"name\": \"Propia\",\n    \"slug\": \"propia\",\n    \"version\": \"1.0.0\",\n    \"runtimeVersion\": \"1.0.0\",\n    \"scheme\": \"propia\",\n   \n    \"experiments\": {\n      \"tsconfigPaths\": true\n    },\n    \"platforms\": [\"ios\", \"android\"],\n    \"plugins\": [\n      \"expo-router\",\n      \"expo-font\"\n    ],\n    \"orientation\": \"portrait\",\n    \"icon\": \"./assets/icon.png\",\n    \"userInterfaceStyle\": \"light\",\n    \"splash\": {\n      \"image\": \"./assets/splash.png\",\n      \"resizeMode\": \"contain\",\n      \"backgroundColor\": \"#ffffff\"\n    },\n    \"assetBundlePatterns\": [\n      \"**/*\"\n    ],\n    \"ios\": {\n      \"supportsTablet\": true\n    },\n    \"android\": {\n      \"adaptiveIcon\": {\n        \"foregroundImage\": \"./assets/adaptive-icon.png\",\n        \"backgroundColor\": \"#ffffff\"\n      },\n      \"softwareKeyboardLayoutMode\": \"pan\",\n      \"predictiveBackGestureEnabled\": false,\n      \"config\": {\n        \"enableOnBackInvokedCallback\": false\n      }\n    },\n    \"extra\": {\n      \"router\": {\n        \"origin\": false\n      },\n      \"eas\": {\n        \"projectId\": \"11853cd2-a6e3-4b02-8a81-29938150b8a1\"\n      }\n    },\n    \"owner\": \"thomino\",\n    \"updates\": {\n      \"url\": \"https://u.expo.dev/11853cd2-a6e3-4b02-8a81-29938150b8a1\"\n    }\n  }\n}\n
+===================================================================
+diff --git a/design-system/propia-main/app.json b/design-system/propia-main/app.json
+--- a/design-system/propia-main/app.json	(revision 16f2d3844bb64bdb26d59dae8c6b6a768fb614b8)
++++ b/design-system/propia-main/app.json	(date 1763032699375)
+@@ -6,11 +6,13 @@
+     "version": "1.0.0",
+     "runtimeVersion": "1.0.0",
+     "scheme": "propia",
+-   
+     "experiments": {
+       "tsconfigPaths": true
+     },
+-    "platforms": ["ios", "android"],
++    "platforms": [
++      "ios",
++      "android"
++    ],
+     "plugins": [
+       "expo-router",
+       "expo-font"
+@@ -27,7 +29,8 @@
+       "**/*"
+     ],
+     "ios": {
+-      "supportsTablet": true
++      "supportsTablet": true,
++      "bundleIdentifier": "com.igorlirap.propia"
+     },
+     "android": {
+       "adaptiveIcon": {
+@@ -38,7 +41,8 @@
+       "predictiveBackGestureEnabled": false,
+       "config": {
+         "enableOnBackInvokedCallback": false
+-      }
++      },
++      "package": "com.igorlirap.propia"
+     },
+     "extra": {
+       "router": {

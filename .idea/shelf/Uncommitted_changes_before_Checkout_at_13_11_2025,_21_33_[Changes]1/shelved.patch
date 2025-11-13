@@ -1,0 +1,3006 @@
+Index: api.yaml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/api.yaml b/api.yaml
+new file mode 100644
+--- /dev/null	(date 1763065422475)
++++ b/api.yaml	(date 1763065422475)
+@@ -0,0 +1,2163 @@
++openapi: 3.0.3
++info:
++  title: AutoFacil API
++  version: 2.0.0
++  description: API for AutoFacil - Student and Instructor endpoints with MVP features
++
++servers:
++  - url: https://api.autofacil.com/v1
++
++tags:
++  - name: Auth
++  - name: Student
++  - name: Instructor
++  - name: Scheduling
++  - name: Payments
++  - name: Chat
++  - name: Detran
++  - name: Admin
++  - name: Tracking
++  - name: LGPD
++
++paths:
++  # ============================================
++  # AUTHENTICATION (Enhanced)
++  # ============================================
++  /auth/register/student:
++    post:
++      tags: [Auth]
++      summary: Register a new student
++      requestBody:
++        required: true
++        content:
++          multipart/form-data:
++            schema:
++              $ref: '#/components/schemas/StudentRegistration'
++      responses:
++        201:
++          description: Student registered successfully
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/AuthResponse'
++        400:
++          description: Validation error
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /auth/register/instructor:
++    post:
++      tags: [Auth]
++      summary: Register a new instructor
++      requestBody:
++        required: true
++        content:
++          multipart/form-data:
++            schema:
++              $ref: '#/components/schemas/InstructorRegistration'
++      responses:
++        201:
++          description: Instructor registered (pending approval)
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/AuthResponse'
++        400:
++          description: Validation error
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /auth/login:
++    post:
++      tags: [Auth]
++      summary: Login (student or instructor)
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              $ref: '#/components/schemas/Login'
++      responses:
++        200:
++          description: Authenticated successfully
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/AuthResponse'
++        401:
++          description: Invalid credentials
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /auth/refresh:
++    post:
++      tags: [Auth]
++      summary: Refresh access token
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [refreshToken]
++              properties:
++                refreshToken:
++                  type: string
++      responses:
++        200:
++          description: Token refreshed
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/AuthResponse'
++        401:
++          description: Invalid refresh token
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /auth/password-reset:
++    post:
++      tags: [Auth]
++      summary: Request password reset
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [cpf, email]
++              properties:
++                cpf:
++                  type: string
++                  pattern: '^[0-9]{11}$'
++                email:
++                  type: string
++                  format: email
++      responses:
++        200:
++          description: Reset email sent
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  message:
++                    type: string
++                    example: "Email de recuperação enviado"
++        404:
++          description: User not found
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /auth/password-reset/confirm:
++    post:
++      tags: [Auth]
++      summary: Confirm password reset with token
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [token, newPassword]
++              properties:
++                token:
++                  type: string
++                newPassword:
++                  type: string
++                  minLength: 8
++                  pattern: '^(?=.*[A-Z])(?=.*[0-9]).*$'
++      responses:
++        200:
++          description: Password reset successful
++        400:
++          description: Invalid or expired token
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /auth/verify-email:
++    post:
++      tags: [Auth]
++      summary: Resend email verification
++      security: [{ bearerAuth: [] }]
++      responses:
++        200:
++          description: Verification email sent
++        429:
++          description: Too many requests
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /auth/verify-email/confirm:
++    get:
++      tags: [Auth]
++      summary: Confirm email with token
++      parameters:
++        - in: query
++          name: token
++          required: true
++          schema:
++            type: string
++      responses:
++        200:
++          description: Email verified
++        400:
++          description: Invalid token
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /auth/verify-phone:
++    post:
++      tags: [Auth]
++      summary: Send SMS verification code
++      security: [{ bearerAuth: [] }]
++      responses:
++        200:
++          description: SMS sent
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  expiresIn:
++                    type: integer
++                    example: 300
++
++  /auth/verify-phone/confirm:
++    post:
++      tags: [Auth]
++      summary: Confirm phone with code
++      security: [{ bearerAuth: [] }]
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [code]
++              properties:
++                code:
++                  type: string
++                  pattern: '^[0-9]{6}$'
++      responses:
++        200:
++          description: Phone verified
++        400:
++          description: Invalid code
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  # ============================================
++  # STUDENT
++  # ============================================
++  /students/me:
++    get:
++      tags: [Student]
++      summary: Get current student profile
++      security: [{ bearerAuth: [] }]
++      responses:
++        200:
++          description: Student profile
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/StudentProfile'
++        401:
++          description: Unauthorized
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++    patch:
++      tags: [Student]
++      summary: Update student profile
++      security: [{ bearerAuth: [] }]
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              $ref: '#/components/schemas/StudentProfileUpdate'
++      responses:
++        200:
++          description: Profile updated
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/StudentProfile'
++        400:
++          description: Validation error
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /students/me/progress:
++    get:
++      tags: [Student]
++      summary: Get student progress
++      security: [{ bearerAuth: [] }]
++      responses:
++        200:
++          description: Progress dashboard
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/StudentProgress'
++
++  # ============================================
++  # INSTRUCTOR
++  # ============================================
++  /instructors/me:
++    get:
++      tags: [Instructor]
++      summary: Get current instructor profile
++      security: [{ bearerAuth: [] }]
++      responses:
++        200:
++          description: Instructor profile
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/InstructorProfile'
++
++    patch:
++      tags: [Instructor]
++      summary: Update instructor profile
++      security: [{ bearerAuth: [] }]
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              $ref: '#/components/schemas/InstructorProfileUpdate'
++      responses:
++        200:
++          description: Profile updated
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/InstructorProfile'
++
++  /instructors/me/rating:
++    get:
++      tags: [Instructor]
++      summary: Get instructor rating and badges
++      security: [{ bearerAuth: [] }]
++      responses:
++        200:
++          description: Rating and badges
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/InstructorRating'
++
++  /instructors:
++    get:
++      tags: [Student]
++      summary: Search instructors with pagination
++      parameters:
++        - in: query
++          name: location
++          schema:
++            type: string
++          description: Address or coordinates (lat,lng)
++        - in: query
++          name: radius
++          schema:
++            type: integer
++            default: 10
++            minimum: 1
++            maximum: 50
++          description: Search radius in km
++        - in: query
++          name: category
++          schema:
++            type: array
++            items:
++              type: string
++              enum: [A, B, C, D, E, ACC]
++          description: License categories
++        - in: query
++          name: priceMin
++          schema:
++            type: number
++            minimum: 50
++        - in: query
++          name: priceMax
++          schema:
++            type: number
++            maximum: 150
++        - in: query
++          name: ratingMin
++          schema:
++            type: number
++            minimum: 0
++            maximum: 5
++        - in: query
++          name: availability
++          schema:
++            type: string
++            format: date
++        - in: query
++          name: vehicleType
++          schema:
++            type: string
++            enum: [manual, automatic]
++        - in: query
++          name: page
++          schema:
++            type: integer
++            default: 1
++            minimum: 1
++        - in: query
++          name: limit
++          schema:
++            type: integer
++            default: 10
++            minimum: 1
++            maximum: 50
++      responses:
++        200:
++          description: Paginated list of instructors
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/PaginatedInstructorsResponse'
++
++  /instructors/{id}:
++    get:
++      tags: [Student]
++      summary: Get instructor details
++      parameters:
++        - in: path
++          name: id
++          required: true
++          schema:
++            type: string
++      responses:
++        200:
++          description: Instructor details
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/InstructorProfile'
++        404:
++          description: Instructor not found
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /instructors/{id}/availability:
++    get:
++      tags: [Student]
++      summary: Get instructor available time slots
++      parameters:
++        - in: path
++          name: id
++          required: true
++          schema:
++            type: string
++        - in: query
++          name: startDate
++          required: true
++          schema:
++            type: string
++            format: date
++        - in: query
++          name: endDate
++          required: true
++          schema:
++            type: string
++            format: date
++      responses:
++        200:
++          description: Available slots
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  slots:
++                    type: array
++                    items:
++                      type: object
++                      properties:
++                        date:
++                          type: string
++                          format: date-time
++                        duration:
++                          type: integer
++                          description: Available duration in hours
++
++  # ============================================
++  # SCHEDULING
++  # ============================================
++  /scheduling:
++    post:
++      tags: [Scheduling]
++      summary: Create a new lesson booking
++      security: [{ bearerAuth: [] }]
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              $ref: '#/components/schemas/ScheduleRequest'
++      responses:
++        201:
++          description: Booking created
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/Booking'
++        400:
++          description: Validation error or slot unavailable
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++    get:
++      tags: [Scheduling]
++      summary: List my bookings with pagination
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: query
++          name: status
++          schema:
++            type: string
++            enum: [pendente, confirmada, concluida, cancelada]
++        - in: query
++          name: page
++          schema:
++            type: integer
++            default: 1
++        - in: query
++          name: limit
++          schema:
++            type: integer
++            default: 10
++      responses:
++        200:
++          description: Paginated list of bookings
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/PaginatedBookingsResponse'
++
++  /scheduling/{id}:
++    get:
++      tags: [Scheduling]
++      summary: Get booking details
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: id
++          required: true
++          schema:
++            type: string
++      responses:
++        200:
++          description: Booking details
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/Booking'
++        404:
++          description: Booking not found
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++    patch:
++      tags: [Scheduling]
++      summary: Update booking status
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: id
++          required: true
++          schema:
++            type: string
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              $ref: '#/components/schemas/BookingUpdate'
++      responses:
++        200:
++          description: Booking updated
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/Booking'
++        400:
++          description: Invalid status transition
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  # ============================================
++  # TRACKING & GPS
++  # ============================================
++  /tracking/start:
++    post:
++      tags: [Tracking]
++      summary: Start GPS tracking for a lesson
++      security: [{ bearerAuth: [] }]
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [bookingId]
++              properties:
++                bookingId:
++                  type: string
++      responses:
++        200:
++          description: Tracking started
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  trackingId:
++                    type: string
++                  startedAt:
++                    type: string
++                    format: date-time
++        403:
++          description: Tracking not authorized or booking not active
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /tracking/{trackingId}/location:
++    post:
++      tags: [Tracking]
++      summary: Update current location during lesson
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: trackingId
++          required: true
++          schema:
++            type: string
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [latitude, longitude]
++              properties:
++                latitude:
++                  type: number
++                  format: double
++                  minimum: -90
++                  maximum: 90
++                longitude:
++                  type: number
++                  format: double
++                  minimum: -180
++                  maximum: 180
++                speed:
++                  type: number
++                  description: Speed in km/h
++                accuracy:
++                  type: number
++                  description: GPS accuracy in meters
++      responses:
++        200:
++          description: Location updated
++        404:
++          description: Tracking session not found
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /tracking/{trackingId}/stop:
++    post:
++      tags: [Tracking]
++      summary: Stop GPS tracking
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: trackingId
++          required: true
++          schema:
++            type: string
++      responses:
++        200:
++          description: Tracking stopped
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  duration:
++                    type: integer
++                    description: Total duration in seconds
++                  distance:
++                    type: number
++                    description: Total distance in km
++
++  /tracking/{trackingId}:
++    get:
++      tags: [Tracking]
++      summary: Get tracking data for a lesson
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: trackingId
++          required: true
++          schema:
++            type: string
++      responses:
++        200:
++          description: Tracking data
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/TrackingData'
++
++  /tracking/sos:
++    post:
++      tags: [Tracking]
++      summary: Send emergency SOS alert
++      security: [{ bearerAuth: [] }]
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [bookingId, latitude, longitude]
++              properties:
++                bookingId:
++                  type: string
++                latitude:
++                  type: number
++                  format: double
++                longitude:
++                  type: number
++                  format: double
++                message:
++                  type: string
++                  maxLength: 200
++      responses:
++        200:
++          description: SOS alert sent to emergency contacts
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  alertId:
++                    type: string
++                  notifiedContacts:
++                    type: array
++                    items:
++                      type: string
++
++  # ============================================
++  # PAYMENTS
++  # ============================================
++  /payments:
++    post:
++      tags: [Payments]
++      summary: Initiate payment for a booking
++      security: [{ bearerAuth: [] }]
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              $ref: '#/components/schemas/PaymentRequest'
++      responses:
++        201:
++          description: Payment initiated
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/PaymentResponse'
++
++  /payments/{id}:
++    get:
++      tags: [Payments]
++      summary: Get payment details
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: id
++          required: true
++          schema:
++            type: string
++      responses:
++        200:
++          description: Payment details
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/Payment'
++
++  /payments/refund:
++    post:
++      tags: [Payments]
++      summary: Request refund for cancelled booking
++      security: [{ bearerAuth: [] }]
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [bookingId, reason]
++              properties:
++                bookingId:
++                  type: string
++                reason:
++                  type: string
++                  maxLength: 500
++      responses:
++        200:
++          description: Refund processed
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  refundId:
++                    type: string
++                  amount:
++                    type: number
++                  status:
++                    type: string
++                    enum: [pendente, aprovado, rejeitado]
++
++  /wallet:
++    get:
++      tags: [Payments]
++      summary: Get instructor wallet info
++      security: [{ bearerAuth: [] }]
++      responses:
++        200:
++          description: Wallet info
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/Wallet'
++
++    post:
++      tags: [Payments]
++      summary: Request withdrawal
++      security: [{ bearerAuth: [] }]
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              $ref: '#/components/schemas/WithdrawalRequest'
++      responses:
++        200:
++          description: Withdrawal requested
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  withdrawalId:
++                    type: string
++                  expectedDate:
++                    type: string
++                    format: date
++        400:
++          description: Insufficient balance or invalid amount
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  # ============================================
++  # CHAT
++  # ============================================
++  /chat/{bookingId}:
++    get:
++      tags: [Chat]
++      summary: Get chat messages for a booking
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: bookingId
++          required: true
++          schema:
++            type: string
++        - in: query
++          name: page
++          schema:
++            type: integer
++            default: 1
++        - in: query
++          name: limit
++          schema:
++            type: integer
++            default: 50
++      responses:
++        200:
++          description: Chat messages
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/PaginatedMessagesResponse'
++
++    post:
++      tags: [Chat]
++      summary: Send a chat message
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: bookingId
++          required: true
++          schema:
++            type: string
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              $ref: '#/components/schemas/ChatMessageSend'
++      responses:
++        201:
++          description: Message sent
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ChatMessage'
++
++  /chat/{bookingId}/report:
++    post:
++      tags: [Chat]
++      summary: Report inappropriate message or behavior
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: bookingId
++          required: true
++          schema:
++            type: string
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [messageId, reason]
++              properties:
++                messageId:
++                  type: string
++                reason:
++                  type: string
++                  enum: [spam, harassment, inappropriate, fraud]
++                details:
++                  type: string
++                  maxLength: 500
++      responses:
++        200:
++          description: Report submitted
++
++  # ============================================
++  # DETRAN
++  # ============================================
++  /detran/validate-lesson:
++    post:
++      tags: [Detran]
++      summary: Validate lesson with Detran
++      security: [{ bearerAuth: [] }]
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              $ref: '#/components/schemas/DetranValidationRequest'
++      responses:
++        200:
++          description: Lesson validated
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/DetranValidationResponse'
++        400:
++          description: Validation failed
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++        503:
++          description: Detran API unavailable
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  # ============================================
++  # ADMIN
++  # ============================================
++  /admin/instructors/pending:
++    get:
++      tags: [Admin]
++      summary: Get pending instructor approvals
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: query
++          name: page
++          schema:
++            type: integer
++            default: 1
++        - in: query
++          name: limit
++          schema:
++            type: integer
++            default: 20
++      responses:
++        200:
++          description: Pending instructors
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/PaginatedInstructorsResponse'
++        403:
++          description: Admin access required
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /admin/instructors/{id}/approve:
++    post:
++      tags: [Admin]
++      summary: Approve instructor registration
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: id
++          required: true
++          schema:
++            type: string
++      requestBody:
++        content:
++          application/json:
++            schema:
++              type: object
++              properties:
++                notes:
++                  type: string
++                  maxLength: 500
++      responses:
++        200:
++          description: Instructor approved
++        404:
++          description: Instructor not found
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ErrorResponse'
++
++  /admin/instructors/{id}/reject:
++    post:
++      tags: [Admin]
++      summary: Reject instructor registration
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: id
++          required: true
++          schema:
++            type: string
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [reason]
++              properties:
++                reason:
++                  type: string
++                  maxLength: 500
++      responses:
++        200:
++          description: Instructor rejected
++
++  /admin/reports:
++    get:
++      tags: [Admin]
++      summary: Get user reports and moderation queue
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: query
++          name: status
++          schema:
++            type: string
++            enum: [pending, reviewed, resolved]
++        - in: query
++          name: type
++          schema:
++            type: string
++            enum: [chat, profile, behavior]
++        - in: query
++          name: page
++          schema:
++            type: integer
++            default: 1
++      responses:
++        200:
++          description: Reports list
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  data:
++                    type: array
++                    items:
++                      $ref: '#/components/schemas/Report'
++                  page:
++                    type: integer
++                  total:
++                    type: integer
++                  hasMore:
++                    type: boolean
++
++  /admin/users/{id}/suspend:
++    post:
++      tags: [Admin]
++      summary: Suspend user account
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: id
++          required: true
++          schema:
++            type: string
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [reason, duration]
++              properties:
++                reason:
++                  type: string
++                duration:
++                  type: integer
++                  description: Suspension duration in days
++      responses:
++        200:
++          description: User suspended
++
++  # ============================================
++  # LGPD COMPLIANCE
++  # ============================================
++  /lgpd/data-export:
++    get:
++      tags: [LGPD]
++      summary: Export all user data (LGPD data portability)
++      security: [{ bearerAuth: [] }]
++      responses:
++        200:
++          description: Data export initiated
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  exportId:
++                    type: string
++                  status:
++                    type: string
++                    enum: [processing, ready]
++                  downloadUrl:
++                    type: string
++                    description: Available when status is ready
++                  expiresAt:
++                    type: string
++                    format: date-time
++
++  /lgpd/data-export/{exportId}:
++    get:
++      tags: [LGPD]
++      summary: Check export status or download
++      security: [{ bearerAuth: [] }]
++      parameters:
++        - in: path
++          name: exportId
++          required: true
++          schema:
++            type: string
++      responses:
++        200:
++          description: Export ready for download
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  downloadUrl:
++                    type: string
++                  expiresAt:
++                    type: string
++                    format: date-time
++
++  /lgpd/delete-account:
++    delete:
++      tags: [LGPD]
++      summary: Request account deletion (LGPD right to be forgotten)
++      security: [{ bearerAuth: [] }]
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              type: object
++              required: [confirmPassword, reason]
++              properties:
++                confirmPassword:
++                  type: string
++                reason:
++                  type: string
++                  enum: [no_longer_needed, privacy_concerns, other]
++                feedback:
++                  type: string
++                  maxLength: 1000
++      responses:
++        200:
++          description: Deletion scheduled
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  scheduledDate:
++                    type: string
++                    format: date
++                    description: Account will be deleted after 30 days grace period
++                  cancellationDeadline:
++                    type: string
++                    format: date-time
++
++  /lgpd/delete-account/cancel:
++    post:
++      tags: [LGPD]
++      summary: Cancel pending account deletion
++      security: [{ bearerAuth: [] }]
++      responses:
++        200:
++          description: Deletion cancelled
++
++  /lgpd/consent:
++    get:
++      tags: [LGPD]
++      summary: Get current consent preferences
++      security: [{ bearerAuth: [] }]
++      responses:
++        200:
++          description: Consent preferences
++          content:
++            application/json:
++              schema:
++                $ref: '#/components/schemas/ConsentPreferences'
++
++    patch:
++      tags: [LGPD]
++      summary: Update consent preferences
++      security: [{ bearerAuth: [] }]
++      requestBody:
++        required: true
++        content:
++          application/json:
++            schema:
++              $ref: '#/components/schemas/ConsentPreferences'
++      responses:
++        200:
++          description: Preferences updated
++
++  /lgpd/data-retention:
++    get:
++      tags: [LGPD]
++      summary: Get data retention information
++      security: [{ bearerAuth: [] }]
++      responses:
++        200:
++          description: Data retention policy
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  accountCreated:
++                    type: string
++                    format: date-time
++                  lastActivity:
++                    type: string
++                    format: date-time
++                  dataRetentionUntil:
++                    type: string
++                    format: date
++                    description: Data will be anonymized after this date if inactive
++                  categories:
++                    type: array
++                    items:
++                      type: object
++                      properties:
++                        type:
++                          type: string
++                        retentionPeriod:
++                          type: string
++                        purpose:
++                          type: string
++
++components:
++  securitySchemes:
++    bearerAuth:
++      type: http
++      scheme: bearer
++      bearerFormat: JWT
++
++  schemas:
++    # ============================================
++    # ENHANCED SCHEMAS
++    # ============================================
++    ErrorResponse:
++      type: object
++      required: [code, message]
++      properties:
++        code:
++          type: string
++          example: "VALIDATION_ERROR"
++        message:
++          type: string
++          example: "Invalid input data"
++        details:
++          type: object
++          additionalProperties: true
++        timestamp:
++          type: string
++          format: date-time
++
++    AuthResponse:
++      type: object
++      properties:
++        accessToken:
++          type: string
++        refreshToken:
++          type: string
++        expiresIn:
++          type: integer
++          description: Token expiration in seconds
++        user:
++          type: object
++          properties:
++            id:
++              type: string
++            type:
++              type: string
++              enum: [student, instructor, admin]
++            email:
++              type: string
++            emailVerified:
++              type: boolean
++            phoneVerified:
++              type: boolean
++
++    StudentRegistration:
++      type: object
++      required: [cpf, name, birthDate, phone, email, password, rg, cnh, proofOfAddress, acceptLGPD]
++      properties:
++        cpf:
++          type: string
++          pattern: '^[0-9]{11}$'
++        name:
++          type: string
++          minLength: 3
++          maxLength: 100
++        birthDate:
++          type: string
++          format: date
++          description: Must be 18+ years old
++        phone:
++          type: string
++          pattern: '^\+55[0-9]{10,11}$'
++        email:
++          type: string
++          format: email
++        password:
++          type: string
++          minLength: 8
++          pattern: '^(?=.*[A-Z])(?=.*[0-9]).*$'
++          description: Must contain at least 1 uppercase letter and 1 number
++        rg:
++          type: string
++          format: binary
++          description: ID document (front and back)
++        cnh:
++          type: string
++          format: binary
++          description: Driver's license (if available)
++        proofOfAddress:
++          type: string
++          format: binary
++          description: Proof of address (max 90 days old)
++        acceptLGPD:
++          type: boolean
++          enum: [true]
++
++    InstructorRegistration:
++      type: object
++      required: [cpf, name, birthDate, phone, email, password, cnh, detranCertificate, vehicle, experienceYears, categories, acceptLGPD]
++      properties:
++        cpf:
++          type: string
++          pattern: '^[0-9]{11}$'
++        name:
++          type: string
++          minLength: 3
++          maxLength: 100
++        birthDate:
++          type: string
++          format: date
++          description: Must be 21+ years old
++        phone:
++          type: string
++          pattern: '^\+55[0-9]{10,11}$'
++        email:
++          type: string
++          format: email
++        password:
++          type: string
++          minLength: 8
++          pattern: '^(?=.*[A-Z])(?=.*[0-9]).*$'
++        cnh:
++          type: string
++          format: binary
++          description: CNH with EAR credential
++        detranCertificate:
++          type: string
++          format: binary
++          description: Detran instructor certificate
++        criminalRecord:
++          type: string
++          format: binary
++          description: Criminal background check (optional)
++        vehicle:
++          $ref: '#/components/schemas/Vehicle'
++        experienceYears:
++          type: integer
++          minimum: 2
++        categories:
++          type: array
++          items:
++            type: string
++            enum: [A, B, C, D, E, ACC]
++          minItems: 1
++        pricePerHour:
++          type: number
++          minimum: 50
++          maximum: 150
++          default: 80
++        acceptLGPD:
++          type: boolean
++          enum: [true]
++
++    Login:
++      type: object
++      required: [cpf, password]
++      properties:
++        cpf:
++          type: string
++          pattern: '^[0-9]{11}$'
++        password:
++          type: string
++
++    StudentProfile:
++      type: object
++      properties:
++        id:
++          type: string
++        cpf:
++          type: string
++        name:
++          type: string
++        birthDate:
++          type: string
++          format: date
++        phone:
++          type: string
++        email:
++          type: string
++        photo:
++          type: string
++          format: uri
++        address:
++          type: string
++        emailVerified:
++          type: boolean
++        phoneVerified:
++          type: boolean
++        status:
++          type: string
++          enum: [ativo, suspenso]
++        preferences:
++          type: object
++          properties:
++            category:
++              type: string
++              enum: [A, B, C, D, E, ACC]
++            budget:
++              type: number
++            schedule:
++              type: string
++        progress:
++          $ref: '#/components/schemas/StudentProgress'
++        createdAt:
++          type: string
++          format: date-time
++
++    StudentProfileUpdate:
++      type: object
++      properties:
++        name:
++          type: string
++          minLength: 3
++        phone:
++          type: string
++          pattern: '^\+55[0-9]{10,11}$'
++        photo:
++          type: string
++          format: uri
++        address:
++          type: string
++        preferences:
++          type: object
++          properties:
++            category:
++              type: string
++              enum: [A, B, C, D, E, ACC]
++            budget:
++              type: number
++            schedule:
++              type: string
++
++    InstructorProfile:
++      type: object
++      properties:
++        id:
++          type: string
++        cpf:
++          type: string
++        name:
++          type: string
++        birthDate:
++          type: string
++          format: date
++        phone:
++          type: string
++        email:
++          type: string
++        photo:
++          type: string
++          format: uri
++        status:
++          type: string
++          enum: [pendente, aprovado, rejeitado, suspenso]
++        categories:
++          type: array
++          items:
++            type: string
++            enum: [A, B, C, D, E, ACC]
++        experienceYears:
++          type: integer
++        vehicle:
++          $ref: '#/components/schemas/Vehicle'
++        pricePerHour:
++          type: number
++        calendar:
++          type: string
++          description: iCal format or JSON availability
++        rating:
++          type: number
++          minimum: 0
++          maximum: 5
++        totalReviews:
++          type: integer
++        badges:
++          type: array
++          items:
++            type: string
++        approvalDate:
++          type: string
++          format: date-time
++        createdAt:
++          type: string
++          format: date-time
++
++    InstructorProfileUpdate:
++      type: object
++      properties:
++        phone:
++          type: string
++        photo:
++          type: string
++          format: uri
++        pricePerHour:
++          type: number
++          minimum: 50
++          maximum: 150
++        calendar:
++          type: string
++        vehicle:
++          $ref: '#/components/schemas/Vehicle'
++
++    Vehicle:
++      type: object
++      required: [model, plate, year, type]
++      properties:
++        model:
++          type: string
++        plate:
++          type: string
++          pattern: '^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$'
++        year:
++          type: integer
++          minimum: 2013
++          maximum: 2025
++        type:
++          type: string
++          enum: [manual, automatic]
++        photo:
++          type: string
++          format: uri
++        hasIdentification:
++          type: boolean
++          description: Vehicle has "Auto-Escola" marking
++
++    InstructorSummary:
++      type: object
++      properties:
++        id:
++          type: string
++        name:
++          type: string
++        rating:
++          type: number
++        totalReviews:
++          type: integer
++        categories:
++          type: array
++          items:
++            type: string
++        pricePerHour:
++          type: number
++        distance:
++          type: number
++          description: Distance in km from search location
++        vehicleType:
++          type: string
++          enum: [manual, automatic]
++        verified:
++          type: boolean
++          description: Detran verification status
++
++    ScheduleRequest:
++      type: object
++      required: [instructorId, date, duration, location, category, focus]
++      properties:
++        instructorId:
++          type: string
++        date:
++          type: string
++          format: date-time
++        duration:
++          type: integer
++          minimum: 1
++          maximum: 4
++          description: Duration in hours
++        location:
++          type: string
++        category:
++          type: string
++          enum: [A, B, C, D, E, ACC]
++        focus:
++          type: string
++          enum: [manobras, rodovia, estacionamento, baliza, geral]
++
++    Booking:
++      type: object
++      properties:
++        id:
++          type: string
++        studentId:
++          type: string
++        instructorId:
++          type: string
++        date:
++          type: string
++          format: date-time
++        duration:
++          type: integer
++        location:
++          type: string
++        category:
++          type: string
++          enum: [A, B, C, D, E, ACC]
++        focus:
++          type: string
++        status:
++          type: string
++          enum: [pendente, confirmada, concluida, cancelada]
++        paymentStatus:
++          type: string
++          enum: [pendente, pago, reembolsado]
++        detranProtocol:
++          type: string
++        cancellationReason:
++          type: string
++        createdAt:
++          type: string
++          format: date-time
++        confirmedAt:
++          type: string
++          format: date-time
++        completedAt:
++          type: string
++          format: date-time
++
++    BookingUpdate:
++      type: object
++      properties:
++        status:
++          type: string
++          enum: [confirmada, concluida, cancelada]
++        rescheduleDate:
++          type: string
++          format: date-time
++        cancellationReason:
++          type: string
++
++    PaymentRequest:
++      type: object
++      required: [bookingId, method, amount]
++      properties:
++        bookingId:
++          type: string
++        method:
++          type: string
++          enum: [pix, card, boleto]
++        amount:
++          type: number
++          minimum: 0
++
++    PaymentResponse:
++      type: object
++      properties:
++        paymentId:
++          type: string
++        status:
++          type: string
++          enum: [pendente, aprovado, rejeitado]
++        qrCode:
++          type: string
++          description: PIX QR Code (if method is PIX)
++        qrCodeUrl:
++          type: string
++          description: PIX QR Code image URL
++        boletoUrl:
++          type: string
++          description: Boleto PDF URL (if method is boleto)
++        expiresAt:
++          type: string
++          format: date-time
++
++    Payment:
++      type: object
++      properties:
++        id:
++          type: string
++        bookingId:
++          type: string
++        amount:
++          type: number
++        platformFee:
++          type: number
++        instructorAmount:
++          type: number
++        method:
++          type: string
++          enum: [pix, card, boleto]
++        status:
++          type: string
++          enum: [pendente, aprovado, rejeitado, reembolsado]
++        createdAt:
++          type: string
++          format: date-time
++        paidAt:
++          type: string
++          format: date-time
++
++    Wallet:
++      type: object
++      properties:
++        available:
++          type: number
++          description: Available balance for withdrawal
++        blocked:
++          type: number
++          description: Blocked balance (pending lessons)
++        total:
++          type: number
++        history:
++          type: array
++          items:
++            $ref: '#/components/schemas/WalletTransaction'
++
++    WalletTransaction:
++      type: object
++      properties:
++        id:
++          type: string
++        type:
++          type: string
++          enum: [credit, debit, withdrawal]
++        amount:
++          type: number
++        description:
++          type: string
++        date:
++          type: string
++          format: date-time
++        status:
++          type: string
++          enum: [pendente, concluido, cancelado]
++
++    WithdrawalRequest:
++      type: object
++      required: [amount, method]
++      properties:
++        amount:
++          type: number
++          minimum: 100
++        method:
++          type: string
++          enum: [pix, ted]
++        pixKey:
++          type: string
++          description: Required if method is PIX
++        bankAccount:
++          type: object
++          description: Required if method is TED
++          properties:
++            bank:
++              type: string
++            agency:
++              type: string
++            account:
++              type: string
++            accountType:
++              type: string
++              enum: [corrente, poupanca]
++
++    ChatMessage:
++      type: object
++      properties:
++        id:
++          type: string
++        senderId:
++          type: string
++        senderName:
++          type: string
++        content:
++          type: string
++        type:
++          type: string
++          enum: [text, audio, image]
++        timestamp:
++          type: string
++          format: date-time
++        status:
++          type: string
++          enum: [sent, delivered, read]
++        mediaUrl:
++          type: string
++          description: URL for audio/image messages
++
++    ChatMessageSend:
++      type: object
++      required: [content, type]
++      properties:
++        content:
++          type: string
++          maxLength: 1000
++        type:
++          type: string
++          enum: [text, audio, image]
++
++    DetranValidationRequest:
++      type: object
++      required: [cpf_aluno, cpf_instrutor, data_aula, duracao_horas, categoria, tipo, veiculo_placa]
++      properties:
++        cpf_aluno:
++          type: string
++          pattern: '^[0-9]{11}$'
++        cpf_instrutor:
++          type: string
++          pattern: '^[0-9]{11}$'
++        data_aula:
++          type: string
++          format: date-time
++        duracao_horas:
++          type: integer
++          minimum: 1
++        categoria:
++          type: string
++          enum: [A, B, C, D, E, ACC]
++        tipo:
++          type: string
++          enum: [teorica, pratica]
++        veiculo_placa:
++          type: string
++
++    DetranValidationResponse:
++      type: object
++      properties:
++        protocolo:
++          type: string
++        hash:
++          type: string
++        status:
++          type: string
++          enum: [validada, rejeitada, pendente]
++        message:
++          type: string
++
++    StudentProgress:
++      type: object
++      properties:
++        theoreticalHours:
++          type: integer
++        practicalHours:
++          type: integer
++        requiredTheoretical:
++          type: integer
++          default: 20
++        requiredPractical:
++          type: integer
++          default: 20
++        focusStats:
++          type: object
++          additionalProperties:
++            type: number
++        lessons:
++          type: array
++          items:
++            $ref: '#/components/schemas/Booking'
++        examEligible:
++          type: boolean
++
++    InstructorRating:
++      type: object
++      properties:
++        rating:
++          type: number
++        totalReviews:
++          type: integer
++        badges:
++          type: array
++          items:
++            type: string
++        reviews:
++          type: array
++          items:
++            $ref: '#/components/schemas/Review'
++        stats:
++          type: object
++          properties:
++            totalLessons:
++              type: integer
++            approvalRate:
++              type: number
++            punctualityRate:
++              type: number
++
++    Review:
++      type: object
++      properties:
++        id:
++          type: string
++        studentName:
++          type: string
++        rating:
++          type: number
++          minimum: 1
++          maximum: 5
++        tags:
++          type: array
++          items:
++            type: string
++        comment:
++          type: string
++          maxLength: 500
++        date:
++          type: string
++          format: date-time
++
++    TrackingData:
++      type: object
++      properties:
++        trackingId:
++          type: string
++        bookingId:
++          type: string
++        startedAt:
++          type: string
++          format: date-time
++        endedAt:
++          type: string
++          format: date-time
++        duration:
++          type: integer
++          description: Duration in seconds
++        distance:
++          type: number
++          description: Total distance in km
++        route:
++          type: array
++          items:
++            type: object
++            properties:
++              latitude:
++                type: number
++              longitude:
++                type: number
++              timestamp:
++                type: string
++                format: date-time
++              speed:
++                type: number
++
++    ConsentPreferences:
++      type: object
++      properties:
++        locationTracking:
++          type: boolean
++          description: GPS tracking during lessons
++        dataSharing:
++          type: boolean
++          description: Share anonymized data for analytics
++        marketing:
++          type: boolean
++          description: Receive promotional communications
++        thirdPartySharing:
++          type: boolean
++          description: Share data with partners (Detran, payment providers)
++        updatedAt:
++          type: string
++          format: date-time
++
++    Report:
++      type: object
++      properties:
++        id:
++          type: string
++        reportedUserId:
++          type: string
++        reportedBy:
++          type: string
++        type:
++          type: string
++          enum: [chat, profile, behavior]
++        reason:
++          type: string
++        details:
++          type: string
++        status:
++          type: string
++          enum: [pending, reviewed, resolved]
++        createdAt:
++          type: string
++          format: date-time
++
++    PaginatedInstructorsResponse:
++      type: object
++      properties:
++        data:
++          type: array
++          items:
++            $ref: '#/components/schemas/InstructorSummary'
++        page:
++          type: integer
++        limit:
++          type: integer
++        total:
++          type: integer
++        hasMore:
++          type: boolean
++
++    PaginatedBookingsResponse:
++      type: object
++      properties:
++        data:
++          type: array
++          items:
++            $ref: '#/components/schemas/Booking'
++        page:
++          type: integer
++        limit:
++          type: integer
++        total:
++          type: integer
++        hasMore:
++          type: boolean
++
++    PaginatedMessagesResponse:
++      type: object
++      properties:
++        data:
++          type: array
++          items:
++            $ref: '#/components/schemas/ChatMessage'
++        page:
++          type: integer
++        limit:
++          type: integer
++        total:
++          type: integer
++        hasMore:
++          type: boolean
+Index: lib/models/index.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/index.ts b/lib/models/index.ts
+new file mode 100644
+--- /dev/null	(date 1763065757779)
++++ b/lib/models/index.ts	(date 1763065757779)
+@@ -0,0 +1,41 @@
++/**
++ * AutoFacil API Models
++ * Central export for all TypeScript models, enums, and interfaces
++ */
++
++// Enums
++export * from './enums';
++
++// Authentication
++export * from './auth';
++
++// Users and Profiles
++export * from './user';
++
++// Booking and Scheduling
++export * from './booking';
++
++// Payments and Wallet
++export * from './payment';
++
++// Chat and Messaging
++export * from './chat';
++
++// Progress and Ratings
++export * from './progress';
++
++// Tracking and GPS
++export * from './tracking';
++
++// Detran Integration
++export * from './detran';
++
++// Admin and Moderation
++export * from './admin';
++
++// LGPD Compliance
++export * from './lgpd';
++
++// Pagination
++export * from './pagination';
++
+Index: lib/models/pagination.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/pagination.ts b/lib/models/pagination.ts
+new file mode 100644
+--- /dev/null	(date 1763065757784)
++++ b/lib/models/pagination.ts	(date 1763065757784)
+@@ -0,0 +1,25 @@
++/**
++ * Pagination Models
++ */
++
++import { InstructorSummary } from './user';
++import { Booking } from './booking';
++import { ChatMessage } from './chat';
++import { Report } from './admin';
++
++export interface PaginatedResponse<T> {
++  data: T[];
++  page: number;
++  limit: number;
++  total: number;
++  hasMore: boolean;
++}
++
++export interface PaginatedInstructorsResponse extends PaginatedResponse<InstructorSummary> {}
++
++export interface PaginatedBookingsResponse extends PaginatedResponse<Booking> {}
++
++export interface PaginatedMessagesResponse extends PaginatedResponse<ChatMessage> {}
++
++export interface PaginatedReportsResponse extends PaginatedResponse<Report> {}
++
+Index: lib/models/detran.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/detran.ts b/lib/models/detran.ts
+new file mode 100644
+--- /dev/null	(date 1763065757792)
++++ b/lib/models/detran.ts	(date 1763065757792)
+@@ -0,0 +1,23 @@
++/**
++ * Detran Integration Models
++ */
++
++import { DetranLessonType, DetranValidationStatus, LicenseCategory } from './enums';
++
++export interface DetranValidationRequest {
++  cpf_aluno: string;
++  cpf_instrutor: string;
++  data_aula: string;
++  duracao_horas: number;
++  categoria: LicenseCategory;
++  tipo: DetranLessonType;
++  veiculo_placa: string;
++}
++
++export interface DetranValidationResponse {
++  protocolo: string;
++  hash: string;
++  status: DetranValidationStatus;
++  message?: string;
++}
++
+Index: lib/models/tracking.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/tracking.ts b/lib/models/tracking.ts
+new file mode 100644
+--- /dev/null	(date 1763065757805)
++++ b/lib/models/tracking.ts	(date 1763065757805)
+@@ -0,0 +1,50 @@
++/**
++ * Tracking and GPS Models
++ */
++
++export interface TrackingData {
++  trackingId: string;
++  bookingId: string;
++  startedAt: string;
++  endedAt?: string;
++  duration: number;
++  distance: number;
++  route: RoutePoint[];
++}
++
++export interface RoutePoint {
++  latitude: number;
++  longitude: number;
++  timestamp: string;
++  speed?: number;
++}
++
++export interface TrackingStartResponse {
++  trackingId: string;
++  startedAt: string;
++}
++
++export interface TrackingStopResponse {
++  duration: number;
++  distance: number;
++}
++
++export interface LocationUpdate {
++  latitude: number;
++  longitude: number;
++  speed?: number;
++  accuracy?: number;
++}
++
++export interface SOSAlert {
++  bookingId: string;
++  latitude: number;
++  longitude: number;
++  message?: string;
++}
++
++export interface SOSAlertResponse {
++  alertId: string;
++  notifiedContacts: string[];
++}
++
+Index: lib/models/lgpd.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/lgpd.ts b/lib/models/lgpd.ts
+new file mode 100644
+--- /dev/null	(date 1763065757799)
++++ b/lib/models/lgpd.ts	(date 1763065757799)
+@@ -0,0 +1,45 @@
++/**
++ * LGPD Compliance Models
++ */
++
++import { ExportStatus, DeletionReason } from './enums';
++
++export interface ConsentPreferences {
++  locationTracking: boolean;
++  dataSharing: boolean;
++  marketing: boolean;
++  thirdPartySharing: boolean;
++  updatedAt?: string;
++}
++
++export interface DataExportResponse {
++  exportId: string;
++  status: ExportStatus;
++  downloadUrl?: string;
++  expiresAt?: string;
++}
++
++export interface AccountDeletionRequest {
++  confirmPassword: string;
++  reason: DeletionReason;
++  feedback?: string;
++}
++
++export interface AccountDeletionResponse {
++  scheduledDate: string;
++  cancellationDeadline: string;
++}
++
++export interface DataRetentionInfo {
++  accountCreated: string;
++  lastActivity: string;
++  dataRetentionUntil: string;
++  categories: DataRetentionCategory[];
++}
++
++export interface DataRetentionCategory {
++  type: string;
++  retentionPeriod: string;
++  purpose: string;
++}
++
+Index: lib/models/admin.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/admin.ts b/lib/models/admin.ts
+new file mode 100644
+--- /dev/null	(date 1763065757794)
++++ b/lib/models/admin.ts	(date 1763065757794)
+@@ -0,0 +1,31 @@
++/**
++ * Admin and Moderation Models
++ */
++
++import { ReportType, ReportStatus } from './enums';
++import { InstructorSummary } from './user';
++
++export interface Report {
++  id: string;
++  reportedUserId: string;
++  reportedBy: string;
++  type: ReportType;
++  reason: string;
++  details?: string;
++  status: ReportStatus;
++  createdAt: string;
++}
++
++export interface AdminApprovalNotes {
++  notes?: string;
++}
++
++export interface AdminRejection {
++  reason: string;
++}
++
++export interface UserSuspension {
++  reason: string;
++  duration: number; // days
++}
++
+Index: lib/models/payment.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/payment.ts b/lib/models/payment.ts
+new file mode 100644
+--- /dev/null	(date 1763065757789)
++++ b/lib/models/payment.ts	(date 1763065757789)
+@@ -0,0 +1,74 @@
++/**
++ * Payment and Wallet Models
++ */
++
++import { PaymentMethod, PaymentStatus, TransactionType, TransactionStatus, WithdrawalMethod, BankAccountType } from './enums';
++
++export interface PaymentRequest {
++  bookingId: string;
++  method: PaymentMethod;
++  amount: number;
++}
++
++export interface PaymentResponse {
++  paymentId: string;
++  status: PaymentStatus;
++  qrCode?: string;
++  qrCodeUrl?: string;
++  boletoUrl?: string;
++  expiresAt?: string;
++}
++
++export interface Payment {
++  id: string;
++  bookingId: string;
++  amount: number;
++  platformFee: number;
++  instructorAmount: number;
++  method: PaymentMethod;
++  status: PaymentStatus;
++  createdAt: string;
++  paidAt?: string;
++}
++
++export interface Wallet {
++  available: number;
++  blocked: number;
++  total: number;
++  history: WalletTransaction[];
++}
++
++export interface WalletTransaction {
++  id: string;
++  type: TransactionType;
++  amount: number;
++  description: string;
++  date: string;
++  status: TransactionStatus;
++}
++
++export interface WithdrawalRequest {
++  amount: number;
++  method: WithdrawalMethod;
++  pixKey?: string;
++  bankAccount?: BankAccount;
++}
++
++export interface BankAccount {
++  bank: string;
++  agency: string;
++  account: string;
++  accountType: BankAccountType;
++}
++
++export interface RefundRequest {
++  bookingId: string;
++  reason: string;
++}
++
++export interface RefundResponse {
++  refundId: string;
++  amount: number;
++  status: string;
++}
++
+Index: lib/models/booking.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/booking.ts b/lib/models/booking.ts
+new file mode 100644
+--- /dev/null	(date 1763065757781)
++++ b/lib/models/booking.ts	(date 1763065757781)
+@@ -0,0 +1,44 @@
++/**
++ * Booking and Scheduling Models
++ */
++
++import { BookingStatus, PaymentStatus, LicenseCategory, LessonFocus } from './enums';
++
++export interface ScheduleRequest {
++  instructorId: string;
++  date: string;
++  duration: number; // 1-4 hours
++  location: string;
++  category: LicenseCategory;
++  focus: LessonFocus;
++}
++
++export interface Booking {
++  id: string;
++  studentId: string;
++  instructorId: string;
++  date: string;
++  duration: number;
++  location: string;
++  category: LicenseCategory;
++  focus: string;
++  status: BookingStatus;
++  paymentStatus: PaymentStatus;
++  detranProtocol?: string;
++  cancellationReason?: string;
++  createdAt: string;
++  confirmedAt?: string;
++  completedAt?: string;
++}
++
++export interface BookingUpdate {
++  status?: BookingStatus;
++  rescheduleDate?: string;
++  cancellationReason?: string;
++}
++
++export interface AvailabilitySlot {
++  date: string;
++  duration: number;
++}
++
+Index: lib/models/progress.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/progress.ts b/lib/models/progress.ts
+new file mode 100644
+--- /dev/null	(date 1763065757785)
++++ b/lib/models/progress.ts	(date 1763065757785)
+@@ -0,0 +1,39 @@
++/**
++ * Progress and Rating Models
++ */
++
++import { Booking } from './booking';
++
++export interface StudentProgress {
++  theoreticalHours: number;
++  practicalHours: number;
++  requiredTheoretical: number;
++  requiredPractical: number;
++  focusStats: Record<string, number>;
++  lessons: Booking[];
++  examEligible: boolean;
++}
++
++export interface InstructorRating {
++  rating: number;
++  totalReviews: number;
++  badges: string[];
++  reviews: Review[];
++  stats: InstructorStats;
++}
++
++export interface InstructorStats {
++  totalLessons: number;
++  approvalRate: number;
++  punctualityRate: number;
++}
++
++export interface Review {
++  id: string;
++  studentName: string;
++  rating: number;
++  tags: string[];
++  comment: string;
++  date: string;
++}
++
+Index: lib/models/chat.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/chat.ts b/lib/models/chat.ts
+new file mode 100644
+--- /dev/null	(date 1763065757777)
++++ b/lib/models/chat.ts	(date 1763065757777)
+@@ -0,0 +1,28 @@
++/**
++ * Chat and Messaging Models
++ */
++
++import { MessageType, MessageStatus, ReportReason } from './enums';
++
++export interface ChatMessage {
++  id: string;
++  senderId: string;
++  senderName: string;
++  content: string;
++  type: MessageType;
++  timestamp: string;
++  status: MessageStatus;
++  mediaUrl?: string;
++}
++
++export interface ChatMessageSend {
++  content: string;
++  type: MessageType;
++}
++
++export interface ChatReport {
++  messageId: string;
++  reason: ReportReason;
++  details?: string;
++}
++
+Index: lib/models/enums.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/enums.ts b/lib/models/enums.ts
+new file mode 100644
+--- /dev/null	(date 1763065757803)
++++ b/lib/models/enums.ts	(date 1763065757803)
+@@ -0,0 +1,145 @@
++/**
++ * Enums for AutoFacil API
++ * Generated from api.yaml
++ */
++
++export enum UserType {
++  STUDENT = 'student',
++  INSTRUCTOR = 'instructor',
++  ADMIN = 'admin',
++}
++
++export enum UserStatus {
++  ATIVO = 'ativo',
++  SUSPENSO = 'suspenso',
++}
++
++export enum InstructorStatus {
++  PENDENTE = 'pendente',
++  APROVADO = 'aprovado',
++  REJEITADO = 'rejeitado',
++  SUSPENSO = 'suspenso',
++}
++
++export enum LicenseCategory {
++  A = 'A',
++  B = 'B',
++  C = 'C',
++  D = 'D',
++  E = 'E',
++  ACC = 'ACC',
++}
++
++export enum VehicleType {
++  MANUAL = 'manual',
++  AUTOMATIC = 'automatic',
++}
++
++export enum LessonFocus {
++  MANOBRAS = 'manobras',
++  RODOVIA = 'rodovia',
++  ESTACIONAMENTO = 'estacionamento',
++  BALIZA = 'baliza',
++  GERAL = 'geral',
++}
++
++export enum BookingStatus {
++  PENDENTE = 'pendente',
++  CONFIRMADA = 'confirmada',
++  CONCLUIDA = 'concluida',
++  CANCELADA = 'cancelada',
++}
++
++export enum PaymentStatus {
++  PENDENTE = 'pendente',
++  PAGO = 'pago',
++  REEMBOLSADO = 'reembolsado',
++}
++
++export enum PaymentMethod {
++  PIX = 'pix',
++  CARD = 'card',
++  BOLETO = 'boleto',
++}
++
++export enum TransactionType {
++  CREDIT = 'credit',
++  DEBIT = 'debit',
++  WITHDRAWAL = 'withdrawal',
++}
++
++export enum TransactionStatus {
++  PENDENTE = 'pendente',
++  CONCLUIDO = 'concluido',
++  CANCELADO = 'cancelado',
++}
++
++export enum WithdrawalMethod {
++  PIX = 'pix',
++  TED = 'ted',
++}
++
++export enum BankAccountType {
++  CORRENTE = 'corrente',
++  POUPANCA = 'poupanca',
++}
++
++export enum MessageType {
++  TEXT = 'text',
++  AUDIO = 'audio',
++  IMAGE = 'image',
++}
++
++export enum MessageStatus {
++  SENT = 'sent',
++  DELIVERED = 'delivered',
++  READ = 'read',
++}
++
++export enum ReportReason {
++  SPAM = 'spam',
++  HARASSMENT = 'harassment',
++  INAPPROPRIATE = 'inappropriate',
++  FRAUD = 'fraud',
++}
++
++export enum ReportType {
++  CHAT = 'chat',
++  PROFILE = 'profile',
++  BEHAVIOR = 'behavior',
++}
++
++export enum ReportStatus {
++  PENDING = 'pending',
++  REVIEWED = 'reviewed',
++  RESOLVED = 'resolved',
++}
++
++export enum DetranLessonType {
++  TEORICA = 'teorica',
++  PRATICA = 'pratica',
++}
++
++export enum DetranValidationStatus {
++  VALIDADA = 'validada',
++  REJEITADA = 'rejeitada',
++  PENDENTE = 'pendente',
++}
++
++export enum RefundStatus {
++  PENDENTE = 'pendente',
++  APROVADO = 'aprovado',
++  REJEITADO = 'rejeitado',
++}
++
++export enum ExportStatus {
++  PROCESSING = 'processing',
++  READY = 'ready',
++}
++
++export enum DeletionReason {
++  NO_LONGER_NEEDED = 'no_longer_needed',
++  PRIVACY_CONCERNS = 'privacy_concerns',
++  OTHER = 'other',
++}
++
+Index: lib/models/user.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/user.ts b/lib/models/user.ts
+new file mode 100644
+--- /dev/null	(date 1763065757787)
++++ b/lib/models/user.ts	(date 1763065757787)
+@@ -0,0 +1,88 @@
++/**
++ * User Profile Models
++ */
++
++import { UserStatus, InstructorStatus, LicenseCategory, VehicleType } from './enums';
++import { StudentProgress } from './progress';
++
++export interface StudentProfile {
++  id: string;
++  cpf: string;
++  name: string;
++  birthDate: string;
++  phone: string;
++  email: string;
++  photo?: string;
++  address?: string;
++  emailVerified: boolean;
++  phoneVerified: boolean;
++  status: UserStatus;
++  preferences?: StudentPreferences;
++  progress?: StudentProgress;
++  createdAt: string;
++}
++
++export interface StudentPreferences {
++  category?: LicenseCategory;
++  budget?: number;
++  schedule?: string;
++}
++
++export interface StudentProfileUpdate {
++  name?: string;
++  phone?: string;
++  photo?: string;
++  address?: string;
++  preferences?: StudentPreferences;
++}
++
++export interface InstructorProfile {
++  id: string;
++  cpf: string;
++  name: string;
++  birthDate: string;
++  phone: string;
++  email: string;
++  photo?: string;
++  status: InstructorStatus;
++  categories: LicenseCategory[];
++  experienceYears: number;
++  vehicle: Vehicle;
++  pricePerHour: number;
++  calendar?: string;
++  rating: number;
++  totalReviews: number;
++  badges: string[];
++  approvalDate?: string;
++  createdAt: string;
++}
++
++export interface InstructorProfileUpdate {
++  phone?: string;
++  photo?: string;
++  pricePerHour?: number;
++  calendar?: string;
++  vehicle?: Vehicle;
++}
++
++export interface Vehicle {
++  model: string;
++  plate: string;
++  year: number;
++  type: VehicleType;
++  photo?: string;
++  hasIdentification?: boolean;
++}
++
++export interface InstructorSummary {
++  id: string;
++  name: string;
++  rating: number;
++  totalReviews: number;
++  categories: string[];
++  pricePerHour: number;
++  distance?: number;
++  vehicleType: VehicleType;
++  verified: boolean;
++}
++
+Index: lib/models/auth.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/lib/models/auth.ts b/lib/models/auth.ts
+new file mode 100644
+--- /dev/null	(date 1763065757773)
++++ b/lib/models/auth.ts	(date 1763065757773)
+@@ -0,0 +1,70 @@
++/**
++ * Authentication Models
++ */
++
++import { UserType } from './enums';
++
++export interface AuthResponse {
++  accessToken: string;
++  refreshToken: string;
++  expiresIn: number;
++  user: {
++    id: string;
++    type: UserType;
++    email: string;
++    emailVerified: boolean;
++    phoneVerified: boolean;
++  };
++}
++
++export interface Login {
++  cpf: string;
++  password: string;
++}
++
++export interface StudentRegistration {
++  cpf: string;
++  name: string;
++  birthDate: string;
++  phone: string;
++  email: string;
++  password: string;
++  rg: File | Blob;
++  cnh?: File | Blob;
++  proofOfAddress: File | Blob;
++  acceptLGPD: true;
++}
++
++export interface InstructorRegistration {
++  cpf: string;
++  name: string;
++  birthDate: string;
++  phone: string;
++  email: string;
++  password: string;
++  cnh: File | Blob;
++  detranCertificate: File | Blob;
++  criminalRecord?: File | Blob;
++  vehicle: VehicleInput;
++  experienceYears: number;
++  categories: string[];
++  pricePerHour?: number;
++  acceptLGPD: true;
++}
++
++export interface VehicleInput {
++  model: string;
++  plate: string;
++  year: number;
++  type: string;
++  photo?: string;
++  hasIdentification?: boolean;
++}
++
++export interface ErrorResponse {
++  code: string;
++  message: string;
++  details?: Record<string, any>;
++  timestamp?: string;
++}
++
