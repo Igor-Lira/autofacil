@@ -1,0 +1,70 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Assistant Guidelines
+
+## UI Component Usage Guidelines
+
+Always prefer existing components over creating new ones. Follow these principles:
+
+- **Text:** Use `ThemedText` for all text content with appropriate className props
+- **Scrollable Content:** Use `ThemedScroller` with className for padding control
+- **Selections:** Use `Chip` for filterable selections and categories
+- **Cards:** Use `Card` and `CardScroller` for featured content with consistent sizing
+- **Lists:** Use `List` and `ListItem` for vertical data, with consistent spacing
+- **Sections:** Use `Section` with appropriate titleSize for content blocks
+- **Icons:** Use `Icon` with specific IconName constants from the icon system
+- **Headers:** Use `Header` for consistent screen headers with proper navigation
+- **Reuse components:** When we have a component on any screen that is reusable in another screen, reuse it. Craete components in mind that can be reused across the app
+
+## Styling Conventions
+
+- **Use className:** Always use Tailwind-style className for styling
+- **Avoid inline:** Never use inline styles except for shadows/complex effects
+- **Theme Support:** Always include light/dark variants:
+  - `bg-light-primary dark:bg-dark-primary`
+  - `text-light-subtext dark:text-dark-subtext`
+- **Spacing:**
+  - Use `p-global` for consistent outer padding
+  - Use standard spacing units (p-2, p-4, etc.)
+  - Follow margin patterns (mt-4, mb-2, etc.)
+- **Layout:** Use flex-row/column with gap-# instead of multiple nested Views
+- **Images:** Use consistent image sizing and proper rounded-* classes
+
+## Code Structure
+
+- **Keep the files as light as possible:** This is just for mockup purposes, dont add any unneccesary funcionality unless asked for
+- **Clean Components:** Keep component files minimal
+- **TypeScript:** Use proper interfaces for all props
+- **Organization:** Group related components and types
+- **Helper Functions:** Extract complex logic outside component bodies
+- **Pure Functions:** Use functional components with hooks
+
+## Data Management
+
+- **Local State:** Use useState with appropriate initializers
+- **Mock Data:** Structure similar to existing patterns
+- **Data Logic:** Keep transformation separate from rendering
+
+## Navigation
+
+- Use `router` from expo-router for programmatic navigation
+- Use `Link` component for navigation elements
+- Follow existing URL patterns
+
+## Format & Style
+
+- camelCase for variables and functions
+- PascalCase for components
+- Consistent indentation (2 spaces)
+- Small, focused functions
+- Proper spacing between code blocks
+
+## Marketplace Specifics
+
+- Use marketplace terminology: users, services, listings
+- Keep UI minimal and clean
+- Support both dark/light mode
+- Ensure designs match existing aesthetic

@@ -1,0 +1,56 @@
+{
+  "expo": {
+    "newArchEnabled": true,
+    "name": "Propia",
+    "slug": "propia",
+    "version": "1.0.0",
+    "runtimeVersion": "1.0.0",
+    "scheme": "propia",
+   
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "platforms": ["ios", "android"],
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "softwareKeyboardLayoutMode": "pan",
+      "predictiveBackGestureEnabled": false,
+      "config": {
+        "enableOnBackInvokedCallback": false
+      }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "11853cd2-a6e3-4b02-8a81-29938150b8a1"
+      }
+    },
+    "owner": "thomino",
+    "updates": {
+      "url": "https://u.expo.dev/11853cd2-a6e3-4b02-8a81-29938150b8a1"
+    }
+  }
+}
