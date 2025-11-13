@@ -28,3 +28,16 @@ export {
   getInstructorAvailability,
   syncInstructorCalendar
 } from './search/getInstructorAvailability';
+
+// Scheduling & Bookings Functions
+export {
+  createBooking,
+  processBookingTimeouts
+} from './scheduling/createBooking';
+export { confirmBooking } from './scheduling/confirmBooking';
+export { cancelBooking } from './scheduling/cancelBooking';
+export { rescheduleBooking } from './scheduling/rescheduleBooking';
+export {
+  markLessonCompleted,
+  processPaymentReleases
+} from './scheduling/markLessonCompleted';
