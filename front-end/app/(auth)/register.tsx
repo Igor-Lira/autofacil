@@ -7,8 +7,14 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   Pressable,
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, db } from '@/app/config/firebaseConfig';
 
 import useThemeColors from '@/app/contexts/ThemeColors';
 import Header from '@/components/Header';
@@ -26,6 +32,8 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  
+  const [isLoading, setIsLoading] = useState(false);
 
   const [errors, setErrors] = useState({
     fullName: '',
@@ -40,15 +48,17 @@ export default function RegisterScreen() {
     let valid = true;
     const temp = { ...errors };
 
+    Object.keys(temp).forEach(k => (temp[k as keyof typeof temp] = ''));
+
     if (!fullName.trim()) {
       temp.fullName = 'Digite seu nome completo';
       valid = false;
-    } else temp.fullName = '';
+    }
 
     if (!phone.trim()) {
       temp.phone = 'Digite seu número de telefone';
       valid = false;
-    } else temp.phone = '';
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -58,12 +68,12 @@ export default function RegisterScreen() {
     } else if (!emailRegex.test(email)) {
       temp.email = 'E-mail inválido';
       valid = false;
-    } else temp.email = '';
+    }
 
     if (emailConfirm !== email) {
       temp.emailConfirm = 'Os e-mails não coincidem';
       valid = false;
-    } else temp.emailConfirm = '';
+    }
 
     const strong =
       password.length >= 8 &&
@@ -78,22 +88,66 @@ export default function RegisterScreen() {
     } else if (!strong) {
       temp.password = 'A senha não atende aos requisitos';
       valid = false;
-    } else temp.password = '';
+    }
 
     if (passwordConfirm !== password) {
       temp.passwordConfirm = 'As senhas não coincidem';
       valid = false;
-    } else temp.passwordConfirm = '';
+    }
 
     setErrors(temp);
     return valid;
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!validateFields()) return;
-    if (!acceptedTerms) return;
+    if (!acceptedTerms) {
+        Alert.alert("Termos de Uso", "Você precisa aceitar os termos para continuar.");
+        return;
+    }
 
-    router.replace('/(tabs)/home');
+    setIsLoading(true);
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await updateProfile(user, {
+        displayName: fullName,
+      });
+
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        fullName: fullName,
+        phone: phone,
+        email: email,
+        role: 'student',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+
+      router.replace('/(tabs)/(home)');
+
+    } catch (error: any) {
+      console.error("Registration Error: ", error);
+      
+      const newErrors = { ...errors };
+
+      // Map Firebase Errors to UI Inputs
+      if (error.code === 'auth/email-already-in-use') {
+        newErrors.email = 'Este e-mail já está cadastrado.';
+      } else if (error.code === 'auth/invalid-email') {
+        newErrors.email = 'E-mail inválido.';
+      } else if (error.code === 'auth/weak-password') {
+        newErrors.password = 'A senha é muito fraca.';
+      } else {
+        Alert.alert("Erro", "Ocorreu um erro inesperado ao criar a conta.");
+      }
+      
+      setErrors(newErrors);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const isButtonDisabled =
@@ -147,7 +201,10 @@ export default function RegisterScreen() {
             value={email}
             keyboardType="email-address"
             autoCapitalize="none"
-            onChangeText={setEmail}
+            onChangeText={(text) => {
+                setEmail(text);
+                if (errors.email) setErrors({...errors, email: ''});
+            }}
             error={errors.email}
             containerClassName="mb-4"
           />
@@ -214,15 +271,23 @@ export default function RegisterScreen() {
             paddingHorizontal: 24,
           }}
           className="bg-light-primary dark:bg-dark-primary">
-          {/* <Button title="Criar Conta" disabled={isButtonDisabled} onPress={handleRegister} /> */}
+          
           <Pressable
-            onPress={() => handleRegister()}
-            className="mb-6 w-full rounded-2xl py-4"
-            disabled={isButtonDisabled}
-            style={{ backgroundColor: '#98D143' }}>
-            <ThemedText className="text-center text-base font-semibold text-white">
-              Criar Conta
-            </ThemedText>
+            onPress={handleRegister}
+            className="mb-6 w-full rounded-2xl py-4 flex-row justify-center items-center"
+            disabled={isButtonDisabled || isLoading}
+            style={{ 
+                backgroundColor: '#98D143', 
+                opacity: (isButtonDisabled || isLoading) ? 0.6 : 1 
+            }}>
+            
+            {isLoading ? (
+                <ActivityIndicator color="#fff" />
+            ) : (
+                <ThemedText className="text-center text-base font-semibold text-white">
+                Criar Conta
+                </ThemedText>
+            )}
           </Pressable>
         </View>
       </KeyboardAvoidingView>
