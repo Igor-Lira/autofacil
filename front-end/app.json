@@ -1,19 +1,23 @@
 {
   "expo": {
     "newArchEnabled": true,
-    "name": "Propia",
-    "slug": "propia",
+    "name": "Autofacil",
+    "slug": "autofacil",
     "version": "1.0.0",
     "runtimeVersion": "1.0.0",
-    "scheme": "propia",
-   
+    "scheme": "autofacil",
+    "jsEngine": "hermes",
     "experiments": {
       "tsconfigPaths": true
     },
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      "expo-web-browser"
     ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -38,17 +42,18 @@
       "predictiveBackGestureEnabled": false,
       "config": {
         "enableOnBackInvokedCallback": false
-      }
+      },
+      "package": "com.autofacil"
     },
     "extra": {
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": "11853cd2-a6e3-4b02-8a81-29938150b8a1"
+        "projectId": "282874a8-affa-4c12-bad0-9f439b5a6492"
       }
     },
-    "owner": "thomino",
+    "owner": "igorlirap",
     "updates": {
       "url": "https://u.expo.dev/11853cd2-a6e3-4b02-8a81-29938150b8a1"
     }
