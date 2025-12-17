@@ -1,14 +1,18 @@
 import { AntDesign } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Pressable, Image, ActivityIndicator, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { signInWithEmailAndPassword } from 'firebase/auth'; // Import Firebase Auth
-
-import { auth } from '@/app/config/firebaseConfig';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import { auth, db } from '@/app/config/firebaseConfig';
 import useThemeColors from '@/app/contexts/ThemeColors';
 import ThemedText from '@/components/ThemedText';
 import Input from '@/components/forms/Input';
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
   const insets = useSafeAreaInsets();
@@ -20,6 +24,54 @@ export default function Login() {
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    webClientId:  process.env.EXPO_PUBLIC_FIREBASE_APP_WEB_CLIENT_ID,
+    androidClientId: process.env.EXPO_PUBLIC_FIREBASE_APP_ANDROID_CLIENT_ID,
+  });
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { id_token } = response.params;
+      handleGoogleSignIn(id_token);
+    }
+  }, [response]);
+
+  const handleGoogleSignIn = async (idToken: string | null | undefined) => {
+    setIsLoading(true);
+    try {
+      const credential = GoogleAuthProvider.credential(idToken);
+      
+      const userCredential = await signInWithCredential(auth, credential);
+      const user = userCredential.user;
+
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+
+      if (!userDocSnapshot.exists()) {
+        await setDoc(userDocRef, {
+            uid: user.uid,
+            fullName: user.displayName || 'Google User',
+            email: user.email,
+            phone: '', // Google doesn't always provide phone
+            role: 'student', // Default role
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            photoURL: user.photoURL, // Bonus: Save their Google profile pic
+        });
+      }
+
+      // 4. Navigate Home
+      router.replace('/(tabs)/(home)');
+
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+      Alert.alert("Erro", "Falha ao entrar com Google.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // --- STANDARD EMAIL VALIDATION ---
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) {
@@ -50,15 +102,10 @@ export default function Login() {
       setIsLoading(true);
       
       try {
-        // Firebase Login Call
         await signInWithEmailAndPassword(auth, email, password);
-        
-        // Success
         router.replace('/(tabs)/(home)');
       } catch (error: any) {
         console.error(error);
-        
-        // Handle Firebase Errors
         if (error.code === 'auth/invalid-credential') {
             Alert.alert('Erro', 'E-mail ou senha incorretos.');
         } else if (error.code === 'auth/user-not-found') {
@@ -137,9 +184,14 @@ export default function Login() {
           <ThemedText className="text-sm text-light-subtext">Ou</ThemedText>
         </View>
 
+        {/* GOOGLE BUTTON */}
         <Pressable
-          onPress={() => router.replace('/(tabs)/(home)')} // Implement Google Auth Logic separately
-          className="flex w-full flex-row items-center justify-center rounded-2xl border border-black py-4 dark:border-white">
+          // Trigger the Google prompt when pressed
+          onPress={() => promptAsync()}
+          disabled={!request || isLoading}
+          className="flex w-full flex-row items-center justify-center rounded-2xl border border-black py-4 dark:border-white"
+          style={{ opacity: (!request || isLoading) ? 0.6 : 1 }}
+        >
           <View className="absolute left-4">
             <AntDesign name="google" size={22} color={colors.text} />
           </View>
