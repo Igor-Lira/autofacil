@@ -1,9 +1,9 @@
 import { router } from 'expo-router';
-import React, { useState, useEffect } from 'react'; // 1. Import useState and useEffect
-import { View, ImageBackground, Text, TouchableOpacity, Pressable, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ImageBackground, Text, TouchableOpacity, Pressable, Image, Alert } from 'react-native';
 
-import { auth } from '@/app/config/firebaseConfig'; 
-import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '@/app/config/firebaseConfig';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 import { useBusinessMode } from '@/app/contexts/BusinesModeContext';
 import AnimatedView from '@/components/AnimatedView';
@@ -39,9 +39,7 @@ const HostProfile = () => {
     <>
       <AnimatedView className="" animation="scaleIn">
         <View className="mb-8 mt-6 items-center rounded-3xl bg-slate-200 p-10 dark:bg-dark-secondary">
-         {/* ... content omitted for brevity ... */}
           <ThemedText className="mt-4 text-2xl font-semibold">New to hosting?</ThemedText>
-          {/* ... content omitted for brevity ... */}
           <Button title="Get started" className="mt-4" textClassName="text-white" />
         </View>
         <View className="px-4">
@@ -67,6 +65,17 @@ const PersonalProfile = () => {
     return () => unsubscribe();
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      
+      router.replace('/(auth)/login');
+    } catch (error) {
+      console.error('Logout Error:', error);
+      Alert.alert('Error', 'Failed to log out. Please try again.');
+    }
+  };
+
   return (
     <AnimatedView className="pt-4" animation="scaleIn">
       <View
@@ -75,7 +84,6 @@ const PersonalProfile = () => {
         <View className="w-1/2 flex-col items-center">
           <Avatar src={require('@/assets/img/thomino.jpg')} size="xxl" />
           <View className="flex-1 items-center justify-center">
-            {/* 4. Replace hardcoded "Thomino" with the state variable */}
             <ThemedText className="text-xl font-bold" numberOfLines={1} adjustsFontSizeToFit>
                 {userEmail}
             </ThemedText>
@@ -125,7 +133,13 @@ const PersonalProfile = () => {
         />
         <ListLink showChevron title="Get help" icon="HelpCircle" href="/screens/help" />
         <Divider />
-        <ListLink showChevron title="Logout" icon="LogOut" href="/(auth)/login" />
+        {/* 3. Updated Logout Link: Removed href, added onPress */}
+        <ListLink 
+            title="Logout" 
+            icon="LogOut" 
+            onPress={handleLogout}
+            showChevron={false} // Usually logouts don't show a chevron arrow
+        />
       </View>
     </AnimatedView>
   );
